@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
     /// <summary>
     /// Member role
     /// </summary>
+    [Table("FL_TB_MemberRole")]
     public class MemberRole
     {
+        [Key]
+        [Column("Id")]
         public int Id { get; set; }
 
+        [Column("RoleName")]
         public string Name { get; set; }
 
         public virtual IEnumerable<Member> Members { get; set; }

@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
-    public class AddressRepository : IAddressRepository
+    /// <summary>
+    /// The team repository
+    /// </summary>
+    public class TeamRepository : ITeamRepository
     {
         //Data base context
         private readonly FootballLeagueDbContext _dbContext;
@@ -14,17 +17,17 @@ namespace Infrastructure.Repositories
         /// Constructor
         /// </summary>
         /// <param name="dbContext">FootballLeague Data base context</param>
-        public AddressRepository(FootballLeagueDbContext dbContext)
+        public TeamRepository(FootballLeagueDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         /// <summary>
-        /// Gets address by it's Id
+        /// Gets team by it's Id
         /// </summary>
-        /// <param name="addressId">address Id</param>
-        /// <returns>Address</returns>
-        public async Task<Address> GetAddressByIdAsync(int addressId)
-            => await _dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
+        /// <param name="teamId">team Id</param>
+        /// <returns>Teams</returns>
+        public async Task<Team> GetTeamByIdAsync(int teamId)
+            => await this._dbContext.Teams.FirstOrDefaultAsync(t => t.Id == teamId);
     }
 }

@@ -13,6 +13,7 @@ namespace WebAPI.Modules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<AddressRepository>().As<IAddressRepository>();
+            builder.RegisterType<TeamRepository>().As<ITeamRepository>();
         }
     }
 }
