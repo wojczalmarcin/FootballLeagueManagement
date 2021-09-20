@@ -1,4 +1,5 @@
-﻿using Domain.Interfaces;
+﻿using Application.Interfaces;
+using Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -19,18 +20,23 @@ namespace WebAPI.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        private readonly ITeamRepository _teamRepository;
+        private readonly IMatchRepository _repository;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, ITeamRepository teamRepository)
+        private readonly IMatchService _service;
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IMatchRepository repository, IMatchService service)
         {
             _logger = logger;
-            _teamRepository = teamRepository;
+            _repository = repository;
+            _service = service;
         }
 
         [HttpGet]
         public async Task<IEnumerable<WeatherForecast>> GetAsync()
         {
-            var team = await _teamRepository.GetTeamByIdAsync(1);
+            var team = await _repository.GetMatchByIdAsync(1);
+            var responseMatch = await _service.GetMatchDataById(1);
+            var responseMatchError = await _service.GetMatchDataById(100);
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

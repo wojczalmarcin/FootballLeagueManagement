@@ -16,7 +16,7 @@ namespace Infrastructure
 
         public DbSet<Match> Matches { get; set; }
 
-        public DbSet<MatchesScore> MatchesScores { get; set; }
+        public DbSet<MatchScore> MatchScores { get; set; }
 
         public DbSet<Member> Members { get; set; }
 

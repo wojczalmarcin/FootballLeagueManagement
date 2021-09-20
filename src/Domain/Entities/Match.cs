@@ -30,7 +30,7 @@ namespace Domain.Entities
         public int? AddressId { get; set; }
 
         [Column("MatchDate")]
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         public virtual Team TeamHome { get; set; }
 
@@ -39,5 +39,7 @@ namespace Domain.Entities
         public virtual Season Season { get; set; }
 
         public virtual Address Address { get; set; }
+
+        public virtual MatchScore MatchScore { get; set; }
     }
 }

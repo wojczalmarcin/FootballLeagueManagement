@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS dbo.FL_TB_MemberRole;
 DROP TABLE IF EXISTS dbo.FL_LG_PlayerStatType;
 DROP TABLE IF EXISTS dbo.FL_TB_Address;
 DROP TABLE IF EXISTS dbo.FL_TB_Season;
-DROP VIEW IF EXISTS dbo.FL_VW_MatchesScore;
+DROP VIEW IF EXISTS dbo.FL_VW_MatchScore;
 
 CREATE TABLE dbo.FL_TB_Address(
 	Id INT IDENTITY(1,1) PRIMARY KEY,
@@ -194,18 +194,13 @@ FOREIGN KEY (TeamId) REFERENCES dbo.FL_TB_Team(Id);
 GO
 
 
-CREATE VIEW dbo.FL_VW_MatchesScore AS
+CREATE VIEW dbo.FL_VW_MatchScore AS
 SELECT mt.Id AS 'MatchId'
-	,tmh.Id AS 'HomeTeamId'
-	,tma.Id AS 'AwayTeamId'
 	,COUNT(CASE WHEN psl.TeamId=mt.TeamHomeId THEN psl.PlayerId END) as 'HomeGoals'
 	,COUNT(CASE WHEN psl.TeamId=mt.TeamAwayId THEN psl.PlayerId END) as 'AwayGoals'
-	,mt.SeasonId
 FROM FL_TB_Match AS mt
-JOIN FL_TB_Team AS tmh ON mt.TeamHomeId = tmh.Id
 LEFT JOIN FL_LG_PlayerStatsLog AS psl ON mt.Id = psl.MatchId 
 	AND psl.StatTypeId=(SELECT Id FROM FL_LG_PlayerStatType WHERE UPPER(StatName)='GOAL') 
-JOIN FL_TB_Team AS tma ON mt.TeamAwayId = tma.Id
-GROUP BY mt.Id,tmh.Id, tma.Id, mt.SeasonId;
+GROUP BY mt.Id;
 
 --CREATE NONCLUSTERED INDEX tabela_prop ON tabela (prop ASC)

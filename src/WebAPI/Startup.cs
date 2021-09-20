@@ -1,5 +1,6 @@
 using Autofac;
 using Infrastructure;
+using Infrastructure.AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -30,11 +31,13 @@ namespace WebAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
             });
             services.AddDbContext<FootballLeagueDbContext>(x => x.UseSqlServer(this.Configuration.GetConnectionString("FootballLeague")));
+            services.AddAutoMapper(typeof(AutoMapperProfile));
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new RepositoryModule());
+            builder.RegisterModule(new ServiceModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

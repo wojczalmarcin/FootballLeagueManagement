@@ -22,7 +22,7 @@ namespace Domain.Entities
         public DateTime StartDate { get; set; }
 
         [Column("EndDate")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [Column("Sponsor")]
         public string Sponsor { get; set; }

@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
+    /// <summary>
+    /// The address repository
+    /// </summary>
     public class AddressRepository : IAddressRepository
     {
         //Data base context
@@ -25,6 +28,6 @@ namespace Infrastructure.Repositories
         /// <param name="addressId">address Id</param>
         /// <returns>Address</returns>
         public async Task<Address> GetAddressByIdAsync(int addressId)
-            => await _dbContext.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
+            => await _dbContext.Addresses.AsNoTracking().FirstOrDefaultAsync(a => a.Id == addressId);
     }
 }

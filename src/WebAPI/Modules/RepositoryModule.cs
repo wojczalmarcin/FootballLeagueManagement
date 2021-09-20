@@ -14,6 +14,7 @@ namespace WebAPI.Modules
         {
             builder.RegisterType<AddressRepository>().As<IAddressRepository>();
             builder.RegisterType<TeamRepository>().As<ITeamRepository>();
+            builder.RegisterType<MatchRepository>().As<IMatchRepository>();
         }
     }
 }

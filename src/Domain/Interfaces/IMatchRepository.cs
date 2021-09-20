@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 namespace Domain.Interfaces
 {
     /// <summary>
-    /// The address repository interface
+    /// The match score repository interface
     /// </summary>
-    public interface IAddressRepository
+    public interface IMatchRepository
     {
         /// <summary>
-        /// Gets address by it's Id
+        /// Gets Match score by match Id
         /// </summary>
-        /// <param name="addressId">address Id</param>
-        /// <returns>Address</returns>
-        Task<Address> GetAddressByIdAsync(int addressId);
+        /// <param name="matchId">match Id</param>
+        /// <returns>Match score</returns>
+        Task<Match> GetMatchByIdAsync(int matchId);
     }
 }
