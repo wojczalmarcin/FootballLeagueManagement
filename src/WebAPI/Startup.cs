@@ -38,6 +38,7 @@ namespace WebAPI
         {
             builder.RegisterModule(new RepositoryModule());
             builder.RegisterModule(new ServiceModule());
+            builder.RegisterModule(new ValidatorModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

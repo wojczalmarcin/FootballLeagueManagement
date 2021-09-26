@@ -1,15 +1,20 @@
 ﻿using Application.DTO;
-using System;
+using Application.Interfaces.Validators;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.Match
 {
-    public class MatchValidator
+    /// <summary>
+    /// The match validator
+    /// </summary>
+    public class MatchValidator : IMatchValidator
     {
+        /// <summary>
+        /// Validates match existence
+        /// </summary>
+        /// <param name="match">match data transfer object</param>
+        /// <returns>Validation result</returns>
         public (HttpStatusCode statusCode, List<string> validationErrors) ValidateMatchExistence(MatchDto match)
         {
             var statusCode = HttpStatusCode.OK;

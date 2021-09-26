@@ -1,6 +1,8 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
@@ -28,6 +30,22 @@ namespace Infrastructure.Repositories
         /// <param name="teamId">team Id</param>
         /// <returns>Teams</returns>
         public async Task<Team> GetTeamByIdAsync(int teamId)
-            => await this._dbContext.Teams.FirstOrDefaultAsync(t => t.Id == teamId);
+            => await this._dbContext.Teams
+            .AsNoTracking()
+            .Include(t => t.Stadium)
+            .Include(t => t.Address)
+            .FirstOrDefaultAsync(t => t.Id == teamId);
+
+        /// <summary>
+        /// Gets teams by season id
+        /// </summary>
+        /// <param name="seasonId">season id</param>
+        /// <returns>Collection of teams</returns>
+        public async Task<IEnumerable<Team>> GetTeamsBySeasonIdAsync(int seasonId)
+            => await this._dbContext.Teams
+            .AsNoTracking()
+            .Include(t=>t.Stadium)
+            .Include(t => t.Address)
+            .Include(t => t.SeasonTeams).Where(t=>t.SeasonTeams.Any(s=>s.SeasonId==seasonId)).ToListAsync();
     }
 }

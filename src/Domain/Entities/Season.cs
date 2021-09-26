@@ -26,5 +26,7 @@ namespace Domain.Entities
 
         [Column("Sponsor")]
         public string Sponsor { get; set; }
+
+        public virtual IEnumerable<SeasonTeam> SeasonTeams { get; set; }
     }
 }

@@ -8,6 +8,8 @@ namespace Application.DTO
 {
     public class MatchDto
     {
+        public int Id { get; set; }
+
         public bool IsFinished { get; set; }
         public DateTime? Date { get; set; }
 

@@ -19,6 +19,7 @@ namespace Infrastructure.AutoMapper
             CreateMap<Season, SeasonDto>().ReverseMap();
             CreateMap<Stadium, StadiumDto>().ReverseMap();
             CreateMap<Team, TeamDto>().ReverseMap();
+            CreateMap<Team, TeamStatisticsDto>();
         }
 
     }

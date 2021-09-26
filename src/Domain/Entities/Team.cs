@@ -29,5 +29,6 @@ namespace Domain.Entities
 
         public virtual Address Address{ get; set; }
         public virtual Stadium Stadium { get; set; }
+        public virtual IEnumerable<SeasonTeam> SeasonTeams { get; set; }
     }
 }

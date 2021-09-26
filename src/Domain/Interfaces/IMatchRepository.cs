@@ -18,5 +18,19 @@ namespace Domain.Interfaces
         /// <param name="matchId">match Id</param>
         /// <returns>Match score</returns>
         Task<Match> GetMatchByIdAsync(int matchId);
+
+        /// <summary>
+        /// Gets matches from given season
+        /// </summary>
+        /// <param name="seasonId">season id</param>
+        /// <returns>Collection of matches</returns>
+        Task<IEnumerable<Match>> GetMatchesBySeasonIdAsync(int seasonId);
+
+        /// <summary>
+        /// Gets matches witch given team ids
+        /// </summary>
+        /// <param name="teamIds">List of team ids</param>
+        /// <returns>Collection of matches</returns>
+        IEnumerable<Match> GetMatchesByTeamIds(List<int> teamIds);
     }
 }

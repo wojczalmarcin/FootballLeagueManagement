@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Domain.Interfaces
@@ -14,5 +15,12 @@ namespace Domain.Interfaces
         /// <param name="teamId">team Id</param>
         /// <returns>Teams</returns>
         Task<Team> GetTeamByIdAsync(int teamId);
+
+        /// <summary>
+        /// Gets teams by season id
+        /// </summary>
+        /// <param name="seasonId">season id</param>
+        /// <returns>Collection of teams</returns>
+        Task<IEnumerable<Team>> GetTeamsBySeasonIdAsync(int seasonId);
     }
 }
