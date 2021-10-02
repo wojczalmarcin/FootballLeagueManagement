@@ -75,7 +75,7 @@ namespace Application.Services.Match
         public async Task<ResponseData<IEnumerable<MatchDto>>> GetMatchesDataBySeasonId(int seasonId)
         {
             var responseData = new ResponseData<IEnumerable<MatchDto>>();
-            var season = _mapper.Map<SeasonDto>(await _seasonRepository.GetSeasonById(seasonId));
+            var season = _mapper.Map<SeasonDto>(await _seasonRepository.GetSeasonByIdAsync(seasonId));
             var seasonValidation = _seasonValidator.ValidateSeasonExistence(season);
 
             responseData.ResponseStatus = seasonValidation.statusCode;
@@ -99,7 +99,7 @@ namespace Application.Services.Match
         public async Task<ResponseData<IEnumerable<TeamStatisticsDto>>> GetSeasonTable(int seasonId)
         {
             var responseData = new ResponseData<IEnumerable<TeamStatisticsDto>>();
-            var season =  _mapper.Map<SeasonDto>( await _seasonRepository.GetSeasonById(seasonId));
+            var season =  _mapper.Map<SeasonDto>( await _seasonRepository.GetSeasonByIdAsync(seasonId));
             var seasonValidation = _seasonValidator.ValidateSeasonExistence(season);
 
             responseData.ResponseStatus = seasonValidation.statusCode;

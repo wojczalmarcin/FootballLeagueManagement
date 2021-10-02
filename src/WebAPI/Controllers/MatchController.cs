@@ -11,7 +11,7 @@ namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MatchController : ControllerBase
+    public class MatchController : FootballLeagueControllerBase
     {
         private readonly IMatchService _matchService;
 
@@ -35,17 +35,7 @@ namespace WebAPI.Controllers
             try
             {
                 var responseData =  await _matchService.GetSeasonTable(seasonId);
-                switch (responseData.ResponseStatus)
-                {
-                    case HttpStatusCode.BadRequest:
-                        return BadRequest(responseData);
-                    case HttpStatusCode.NotFound:
-                        return NotFound(responseData);
-                    case HttpStatusCode.Forbidden:
-                        return Forbid(responseData.ValidationErrors.ToString());
-                    default:
-                        return Ok(responseData);
-                }
+                return HttpResponse(responseData);
             }
             catch(Exception e)
             {

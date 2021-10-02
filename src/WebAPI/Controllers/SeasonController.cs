@@ -3,14 +3,13 @@ using Application.DTO;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SeasonController : ControllerBase
+    public class SeasonController : FootballLeagueControllerBase
     {
         private readonly ISeasonService _seasonService;
 
@@ -29,22 +28,12 @@ namespace WebAPI.Controllers
         /// <param name="seasonId">season id</param>
         /// <returns>Response data</returns>
         [HttpGet("{seasonId}")]
-        public async Task<ActionResult<ResponseData<SeasonDto>>> GetSeasonById(int seasonId)
+        public async Task<ActionResult<ResponseData<SeasonDto>>> GetSeasonByIdAsync(int seasonId)
         {
             try
             {
-                var responseData = await _seasonService.GetSeasonById(seasonId);
-                switch (responseData.ResponseStatus)
-                {
-                    case HttpStatusCode.BadRequest:
-                        return BadRequest(responseData);
-                    case HttpStatusCode.NotFound:
-                        return NotFound(responseData);
-                    case HttpStatusCode.Forbidden:
-                        return Forbid(responseData.ValidationErrors.ToString());
-                    default:
-                        return Ok(responseData);
-                }
+                var responseData = await _seasonService.GetSeasonByIdAsync(seasonId);
+                return HttpResponse(responseData);
             }
             catch (Exception e)
             {
@@ -57,22 +46,50 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <returns>Response data</returns>
         [HttpGet]
-        public async Task<ActionResult<ResponseData<SeasonDto>>> GetAllSeasons()
+        public async Task<ActionResult<ResponseData<SeasonDto>>> GetAllSeasonsAsync()
         {
             try
             {
-                var responseData = await _seasonService.GetAllSeasons();
-                switch (responseData.ResponseStatus)
-                {
-                    case HttpStatusCode.BadRequest:
-                        return BadRequest(responseData);
-                    case HttpStatusCode.NotFound:
-                        return NotFound(responseData);
-                    case HttpStatusCode.Forbidden:
-                        return Forbid(responseData.ValidationErrors.ToString());
-                    default:
-                        return Ok(responseData);
-                }
+                var responseData = await _seasonService.GetAllSeasonsAsync();
+                return HttpResponse(responseData);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Puts season
+        /// </summary>
+        /// <param name="season">Season to put</param>
+        /// <returns>Response data</returns>
+        [HttpPut]
+        public async Task<ActionResult<ResponseData<SeasonDto>>> PutAsync(SeasonDto season)
+        {
+            try
+            {
+                var responseData = await _seasonService.EditSeasonAsync(season);
+                return HttpResponse(responseData);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Puts season
+        /// </summary>
+        /// <param name="season">Season to put</param>
+        /// <returns>Response data</returns>
+        [HttpPost]
+        public async Task<ActionResult<ResponseData<SeasonDto>>> PostAsync(CreateSeasonDto season)
+        {
+            try
+            {
+                var responseData = await _seasonService.CreateSeasonAsync(season);
+                return HttpResponse(responseData);
             }
             catch (Exception e)
             {
