@@ -14,11 +14,9 @@ namespace Application.Services.Season
     /// <summary>
     /// The season service
     /// </summary>
-    public class SeasonService : ISeasonService
+    public class SeasonService : Service, ISeasonService
     {
         private readonly ISeasonRepository _seasonRepository;
-
-        private readonly IMapper _mapper;
 
         private readonly ISeasonValidator _seasonValidator;
 
@@ -28,10 +26,9 @@ namespace Application.Services.Season
         /// <param name="seasonRepository">The season repository</param>
         /// <param name="mapper">The mapper</param>
         /// <param name="seasonValidator">The season validator</param>
-        public SeasonService(ISeasonRepository seasonRepository, IMapper mapper, ISeasonValidator seasonValidator)
+        public SeasonService(ISeasonRepository seasonRepository, IMapper mapper, ISeasonValidator seasonValidator) : base(mapper)
         {
             _seasonRepository = seasonRepository;
-            _mapper = mapper;
             _seasonValidator = seasonValidator;
         }
 
@@ -40,24 +37,11 @@ namespace Application.Services.Season
         /// </summary>
         /// <param name="seasonId">season id</param>
         /// <returns>Response data with <see cref="SeasonDto"/></returns>
-        public async Task<ResponseData<SeasonDto>> GetSeasonByIdAsync(int seasonId)
-        {
-            var responseData = new ResponseData<SeasonDto>();
-
-            var season = _mapper.Map<SeasonDto>(await _seasonRepository.GetSeasonByIdAsync(seasonId));
-            var seasonValidation = _seasonValidator.ValidateSeasonExistence(season);
-
-            responseData.ResponseStatus = seasonValidation.statusCode;
-            responseData.ValidationErrors = seasonValidation.validationErrors;
-
-            if (seasonValidation.statusCode != HttpStatusCode.OK)
-            {
-                return responseData;
-            }
-
-            responseData.Data = season;
-            return responseData;
-        }
+        public async Task<ResponseData<SeasonDto>> GetSeasonByIdAsync(int seasonId) 
+            => await GetByIdAsync<SeasonDto, Domain.Entities.Season>(seasonId, 
+                _seasonRepository.GetSeasonByIdAsync, 
+                _seasonValidator.ValidateSeasonExistence); 
+        
 
         /// <summary>
         /// Gets all seasons
@@ -65,22 +49,13 @@ namespace Application.Services.Season
         /// <returns>Response data with collection of <see cref="SeasonDto"/></returns>
         public async Task<ResponseData<IEnumerable<SeasonDto>>> GetAllSeasonsAsync()
         {
-            var responseData = new ResponseData<IEnumerable<SeasonDto>>();
+            var responseData = await GetAllAsync<SeasonDto, Domain.Entities.Season>(_seasonRepository.GetAllSeasonsAsync,
+                 _seasonValidator.ValidateSeasonExistence);
 
-            var seasons = _mapper.Map<IEnumerable<SeasonDto>>(await _seasonRepository.GetAllSeasonsAsync());
-            var seasonValidation = _seasonValidator.ValidateSeasonExistence(seasons.ToList()[0]);
-
-            responseData.ResponseStatus = seasonValidation.statusCode;
-            responseData.ValidationErrors = seasonValidation.validationErrors;
-
-            if (seasonValidation.statusCode != HttpStatusCode.OK)
-            {
-                return responseData;
-            }
-
-            responseData.Data = seasons;
+            responseData.Data = responseData.Data.ToList().OrderByDescending(s=>s.EndDate);
             return responseData;
         }
+            
 
         /// <summary>
         /// Edits season
@@ -93,7 +68,7 @@ namespace Application.Services.Season
 
             var seasonToEdit = _mapper.Map<SeasonDto>(await _seasonRepository.GetSeasonByIdAsync(season.Id));
 
-            var editingValidation = _seasonValidator.ValidateSeasonEdit(season, seasonToEdit);
+            var editingValidation = await _seasonValidator.ValidateSeasonEditAsync(season, seasonToEdit);
 
             responseData.ResponseStatus = editingValidation.statusCode;
             responseData.ValidationErrors = editingValidation.validationErrors;
@@ -125,7 +100,7 @@ namespace Application.Services.Season
         {
             var responseData = new ResponseData<SeasonDto>();
 
-            var creationValidation = _seasonValidator.ValidateSeasonCreation(season);
+            var creationValidation = await _seasonValidator.ValidateSeasonCreation(season);
 
             responseData.ResponseStatus = creationValidation.statusCode;
             responseData.ValidationErrors = creationValidation.validationErrors;

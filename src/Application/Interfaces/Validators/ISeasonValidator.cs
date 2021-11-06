@@ -1,6 +1,7 @@
 ﻿using Application.DTO;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Application.Interfaces.Validators
 {
@@ -22,13 +23,13 @@ namespace Application.Interfaces.Validators
         /// <param name="season">The season</param>
         /// <param name="seasonToEdit">The season to edit</param>
         /// <returns>Validation result</returns>
-        (HttpStatusCode statusCode, List<string> validationErrors) ValidateSeasonEdit(SeasonDto season, SeasonDto seasonToEdit);
+        Task<(HttpStatusCode statusCode, List<string> validationErrors)> ValidateSeasonEditAsync(SeasonDto season, SeasonDto seasonToEdit);
 
         /// <summary>
         /// Validates season creation
         /// </summary>
         /// <param name="season">Season to add</param>
         /// <returns>Validation result</returns>
-        (HttpStatusCode statusCode, List<string> validationErrors) ValidateSeasonCreation(CreateSeasonDto season);
+        Task<(HttpStatusCode statusCode, List<string> validationErrors)> ValidateSeasonCreation(CreateSeasonDto season);
     }
 }

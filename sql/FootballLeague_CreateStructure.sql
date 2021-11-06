@@ -1,6 +1,8 @@
 USE FootballLeague;
 GO
 
+-- Drop tables
+DROP TABLE IF EXISTS dbo.FL_TB_MatchMember;
 DROP TABLE IF EXISTS dbo.FL_LG_PlayerStatsLog;
 DROP TABLE IF EXISTS dbo.FL_TB_Match;
 DROP TABLE IF EXISTS dbo.FL_LG_PlayerSuspensionLog;
@@ -15,6 +17,7 @@ DROP TABLE IF EXISTS dbo.FL_TB_Address;
 DROP TABLE IF EXISTS dbo.FL_TB_Season;
 DROP VIEW IF EXISTS dbo.FL_VW_MatchScore;
 
+-- Create tables
 CREATE TABLE dbo.FL_TB_Address(
 	Id INT IDENTITY(1,1) PRIMARY KEY,
 	City NVARCHAR(25) NOT NULL,
@@ -26,7 +29,8 @@ GO
 
 CREATE TABLE dbo.FL_LG_PlayerStatType(
 	Id INT IDENTITY(1,1) PRIMARY KEY,
-	StatName NVARCHAR(15) NOT NULL
+	StatName NVARCHAR(15) NOT NULL,
+	IsGoal BIT NOT NULL
 );
 GO
 
@@ -61,7 +65,16 @@ GO
 
 CREATE TABLE dbo.FL_TB_MemberRole(
 	Id INT IDENTITY(1,1) PRIMARY KEY,
-	RoleName NVARCHAR(16) NOT NULL
+	RoleName NVARCHAR(16) NOT NULL,
+	IsPlayer BIT NOT NULL
+);
+GO
+
+CREATE TABLE dbo.FL_TB_MatchMember(
+	Id INT IDENTITY(1,1) PRIMARY KEY,
+	MatchId INT NOT NULL,
+	MemberId INT NOT NULL,
+	IsMemberInHomeTeam BIT NOT NULL
 );
 GO
 
@@ -112,6 +125,8 @@ CREATE TABLE dbo.FL_TB_SeasonTeam(
 	TeamId INT NOT NULL
 )
 
+-- Foreign keys
+
 ALTER TABLE dbo.FL_TB_FootballerPitchTime
 WITH CHECK ADD CONSTRAINT FK_Member_FootballerPitchTime
 FOREIGN KEY (PlayerId) REFERENCES dbo.FL_TB_Member(Id);
@@ -140,6 +155,16 @@ GO
 ALTER TABLE dbo.FL_TB_Member
 WITH CHECK ADD CONSTRAINT FK_Team_Member
 FOREIGN KEY (TeamId) REFERENCES dbo.FL_TB_Team(Id);
+GO
+
+ALTER TABLE dbo.FL_TB_MatchMember
+WITH CHECK ADD CONSTRAINT FK_Match_MatchMember
+FOREIGN KEY (MatchId) REFERENCES dbo.FL_TB_Match(Id);
+GO
+
+ALTER TABLE dbo.FL_TB_MatchMember
+WITH CHECK ADD CONSTRAINT FK_Member_MatchMember
+FOREIGN KEY (MemberId) REFERENCES dbo.FL_TB_Member(Id);
 GO
 
 ALTER TABLE dbo.FL_LG_PlayerStatsLog
@@ -193,14 +218,43 @@ WITH CHECK ADD CONSTRAINT FK_Team_SeasonTeam
 FOREIGN KEY (TeamId) REFERENCES dbo.FL_TB_Team(Id);
 GO
 
-
+-- Create views
 CREATE VIEW dbo.FL_VW_MatchScore AS
 SELECT mt.Id AS 'MatchId'
 	,COUNT(CASE WHEN psl.TeamId=mt.TeamHomeId THEN psl.PlayerId END) as 'HomeGoals'
 	,COUNT(CASE WHEN psl.TeamId=mt.TeamAwayId THEN psl.PlayerId END) as 'AwayGoals'
 FROM FL_TB_Match AS mt
 LEFT JOIN FL_LG_PlayerStatsLog AS psl ON mt.Id = psl.MatchId 
-	AND psl.StatTypeId=(SELECT Id FROM FL_LG_PlayerStatType WHERE UPPER(StatName)='GOAL') 
+	AND psl.StatTypeId=(SELECT Id FROM FL_LG_PlayerStatType WHERE IsGoal = 1) 
 GROUP BY mt.Id;
+GO
 
---CREATE NONCLUSTERED INDEX tabela_prop ON tabela (prop ASC)
+-- Create indexes
+
+CREATE NONCLUSTERED INDEX PlayerId ON dbo.FL_TB_FootballerPitchTime (PlayerId ASC);
+
+CREATE NONCLUSTERED INDEX TeamHomeId ON dbo.FL_TB_Match (TeamHomeId ASC);
+CREATE NONCLUSTERED INDEX TeamAwayId ON dbo.FL_TB_Match (TeamAwayId ASC);
+CREATE NONCLUSTERED INDEX SeasonId ON dbo.FL_TB_Match (SeasonId ASC);
+CREATE NONCLUSTERED INDEX AddressId ON dbo.FL_TB_Match (AddressId ASC);
+
+CREATE NONCLUSTERED INDEX MemberRoleId ON dbo.FL_TB_Member (MemberRoleId ASC);
+CREATE NONCLUSTERED INDEX TeamId ON dbo.FL_TB_Member (TeamId ASC);
+
+CREATE NONCLUSTERED INDEX MatchId ON dbo.FL_TB_MatchMember (MatchId ASC);
+CREATE NONCLUSTERED INDEX MemberId ON dbo.FL_TB_MatchMember (MemberId ASC);
+
+CREATE NONCLUSTERED INDEX MatchId ON dbo.FL_LG_PlayerStatsLog (MatchId ASC);
+CREATE NONCLUSTERED INDEX PlayerId ON dbo.FL_LG_PlayerStatsLog (PlayerId ASC);
+CREATE NONCLUSTERED INDEX TeamId ON dbo.FL_LG_PlayerStatsLog (TeamId ASC);
+CREATE NONCLUSTERED INDEX StatTypeId ON dbo.FL_LG_PlayerStatsLog (StatTypeId ASC);
+
+CREATE NONCLUSTERED INDEX PlayerId ON dbo.FL_LG_PlayerSuspensionLog (PlayerId ASC);
+
+CREATE NONCLUSTERED INDEX AddressId ON dbo.FL_TB_Stadium (AddressId ASC);
+
+CREATE NONCLUSTERED INDEX AddressId ON dbo.FL_TB_Team (AddressId ASC);
+CREATE NONCLUSTERED INDEX StadiumId ON dbo.FL_TB_Team (StadiumId ASC);
+
+CREATE NONCLUSTERED INDEX SeasonId ON dbo.FL_TB_SeasonTeam (SeasonId ASC);
+CREATE NONCLUSTERED INDEX TeamId ON dbo.FL_TB_SeasonTeam (TeamId ASC);

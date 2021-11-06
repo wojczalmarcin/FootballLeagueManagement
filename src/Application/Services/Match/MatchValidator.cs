@@ -8,7 +8,7 @@ namespace Application.Services.Match
     /// <summary>
     /// The match validator
     /// </summary>
-    public class MatchValidator : IMatchValidator
+    public class MatchValidator : Validator, IMatchValidator
     {
         /// <summary>
         /// Validates match existence
@@ -20,11 +20,10 @@ namespace Application.Services.Match
             var statusCode = HttpStatusCode.OK;
             var validationErrors = new List<string>();
 
-            if (match==null)
+            var existence = ValidateEntityExistence(match, "Match with given Id doesn't exist");
+            if (existence.statusCode != HttpStatusCode.OK)
             {
-                statusCode = HttpStatusCode.NotFound;
-                validationErrors.Add("Match with given Id doesn't exist");
-                return (statusCode, validationErrors);
+                return existence;
             }
 
             if(match.TeamAway==null)

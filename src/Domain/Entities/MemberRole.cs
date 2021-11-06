@@ -17,6 +17,8 @@ namespace Domain.Entities
         [Column("RoleName")]
         public string Name { get; set; }
 
+        [Column("IsPlayer")]
+        public bool IsPlayer { get; set; }
         public virtual IEnumerable<Member> Members { get; set; }
     }
 }

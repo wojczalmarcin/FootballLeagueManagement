@@ -1,11 +1,6 @@
 ﻿using Application.DTO;
 using AutoMapper;
 using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.AutoMapper
 {
@@ -22,6 +17,11 @@ namespace Infrastructure.AutoMapper
             CreateMap<Team, TeamStatisticsDto>();
             CreateMap<Season, CreateSeasonDto>().ReverseMap();
             CreateMap<CreateSeasonDto, SeasonDto>().ReverseMap();
+            CreateMap<Member, MemberDto>().ReverseMap();
+            CreateMap<MemberRole, MemberRoleDto>().ReverseMap();
+            CreateMap<MemberEditDto, MemberDto>();
+            CreateMap<PlayerStatType, PlayerStatTypeDto>().ReverseMap();
+            CreateMap<PlayerStatsLog, PlayerStatsDto>().ReverseMap();
         }
 
     }

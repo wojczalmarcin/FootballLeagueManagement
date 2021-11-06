@@ -11,7 +11,7 @@ namespace Domain.Entities
     /// <summary>
     /// League table VIEW!!!
     /// </summary>
-    [Table("FL_VW_MatchesScore")]
+    [Table("FL_VW_MatchScore")]
     public class MatchScore
     {
         [Key]

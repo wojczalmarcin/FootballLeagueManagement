@@ -12,15 +12,13 @@ using System.Threading.Tasks;
 
 namespace Application.Services.Match
 {
-    public class MatchService : IMatchService
+    public class MatchService : Service, IMatchService
     {
         private readonly IMatchRepository _matchRepository;
 
         private readonly ITeamRepository _teamRepository;
 
         private readonly ISeasonRepository _seasonRepository;
-
-        private readonly IMapper _mapper;
 
         private readonly IMatchValidator _matchValidator;
 
@@ -34,11 +32,11 @@ namespace Application.Services.Match
             ISeasonRepository seasonRepository,
             IMatchValidator matchValidator,
             ISeasonValidator seasonValidator)
+            : base (mapper)
         {
             _matchRepository = matchRepository;
             _teamRepository = teamRepository;
             _seasonRepository = seasonRepository;
-            _mapper = mapper;
             _matchValidator = matchValidator;
             matchLogic = new MatchLogic();
             _seasonValidator = seasonValidator;
@@ -50,22 +48,8 @@ namespace Application.Services.Match
         /// <param name="matchId">Match id</param>
         /// <returns>Response with match data</returns>
         public async Task<ResponseData<MatchDto>> GetMatchDataById(int matchId)
-        {
-            var responseData = new ResponseData<MatchDto>();
-
-            var match = _mapper.Map<MatchDto>(await _matchRepository.GetMatchByIdAsync(matchId));
-            var matchValidation = _matchValidator.ValidateMatchExistence(match);
-
-            responseData.ResponseStatus = matchValidation.statusCode;
-            responseData.ValidationErrors = matchValidation.validationErrors;
-
-            if(matchValidation.statusCode == HttpStatusCode.OK)
-            {
-                responseData.Data = match;
-            }
-
-            return responseData;
-        }
+            => await GetByIdAsync<MatchDto, Domain.Entities.Match> (matchId, _matchRepository.GetMatchByIdAsync, 
+                _matchValidator.ValidateMatchExistence);
 
         /// <summary>
         /// Gets matches by season id

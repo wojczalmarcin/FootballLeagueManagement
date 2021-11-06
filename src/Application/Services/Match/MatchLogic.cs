@@ -24,6 +24,7 @@ namespace Application.Services.Match
                 team.WonAway = 0;
                 team.DrawnAway = 0;
                 team.LostAway = 0;
+                team.MatchesPlayed = 0;
 
                 listOfTasks.Add(CalculateStatistics(team, matchesList));
             }
@@ -50,10 +51,12 @@ namespace Application.Services.Match
                     if (match.TeamHome.Id == team.Id)
                     {
                         StatisticsHome(team, match);
+                        team.MatchesPlayed++;
                     }
                     else if (match.TeamAway.Id == team.Id)
                     {
                         StatisticsAway(team, match);
+                        team.MatchesPlayed++;
                     }
                 }
             });

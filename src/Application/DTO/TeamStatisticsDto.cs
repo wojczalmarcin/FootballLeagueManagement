@@ -1,15 +1,8 @@
-﻿using Application.Services.Match;
-using AutoMapper;
-using Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace Application.DTO
 {
-    public class TeamStatisticsDto : IComparable<TeamStatisticsDto>
+    public class TeamStatisticsDto : IDtoWithId, IComparable<TeamStatisticsDto>
     {
         public int Id { get; set; }
 

@@ -4,7 +4,6 @@ using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -54,17 +53,7 @@ namespace WebAPI.Controllers
             try
             {
                 var responseData = await _matchService.GetMatchDataById(matchId);
-                switch (responseData.ResponseStatus)
-                {
-                    case HttpStatusCode.BadRequest:
-                        return BadRequest(responseData);
-                    case HttpStatusCode.NotFound:
-                        return NotFound(responseData);
-                    case HttpStatusCode.Forbidden:
-                        return Forbid(responseData.ValidationErrors.ToString());
-                    default:
-                        return Ok(responseData);
-                }
+                return HttpResponse(responseData);
             }
             catch (Exception e)
             {
@@ -77,23 +66,13 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <param name="seasonId">season Id</param>
         /// <returns>Response data</returns>
-        [HttpGet("{seasonId}")]
+        [HttpGet]
         public async Task<ActionResult<ResponseData<IEnumerable<MatchDto>>>> GetMatchesBySeasonId(int seasonId)
         {
             try
             {
                 var responseData = await _matchService.GetMatchesDataBySeasonId(seasonId);
-                switch (responseData.ResponseStatus)
-                {
-                    case HttpStatusCode.BadRequest:
-                        return BadRequest(responseData);
-                    case HttpStatusCode.NotFound:
-                        return NotFound(responseData);
-                    case HttpStatusCode.Forbidden:
-                        return Forbid(responseData.ValidationErrors.ToString());
-                    default:
-                        return Ok(responseData);
-                }
+                return HttpResponse(responseData);
             }
             catch (Exception e)
             {

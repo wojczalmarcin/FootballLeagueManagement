@@ -1,0 +1,26 @@
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+code {
+  color: #E01A76;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+  margin: 1%;
+  width: 5rem;
+}
+.btn-primary:disabled {
+    background-color: gray;
+}
+.btn-invisible {
+  color: rgb(0,0,0,0);
+  background-color: rgb(0,0,0,0);
+  border-color: rgb(0,0,0,0);
+  margin: 1%;
+  width: 5rem;
+}

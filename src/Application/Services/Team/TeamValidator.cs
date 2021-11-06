@@ -12,7 +12,7 @@ namespace Application.Services.Team
     /// <summary>
     /// The team validator
     /// </summary>
-    public class TeamValidator : ITeamValidator
+    public class TeamValidator : Validator, ITeamValidator
     {
         /// <summary>
         /// Validates team existence
@@ -20,18 +20,22 @@ namespace Application.Services.Team
         /// <param name="team">team</param>
         /// <returns>Validation result</returns>
         public (HttpStatusCode statusCode, List<string> validationErrors) ValidateTeamExistence(TeamDto team)
+            => ValidateEntityExistence(team, "Team with given Id doesn't exist");
+
+        /// <summary>
+        /// Validates team editing
+        /// </summary>
+        /// <param name="team">The team</param>
+        /// <param name="teamToEdit">The team to edit</param>
+        /// <returns>Validation result</returns>
+        public (HttpStatusCode statusCode, List<string> validationErrors) ValidateTeamEdit(TeamDto team, TeamDto teamToEdit)
         {
-            var statusCode = HttpStatusCode.OK;
-            var validationErrors = new List<string>();
-
-            if (team == null)
+            (HttpStatusCode statusCode, List<string> validationErrors) validation = this.ValidateTeamExistence(teamToEdit);
+            if (validation.statusCode != HttpStatusCode.OK)
             {
-                statusCode = HttpStatusCode.NotFound;
-                validationErrors.Add("Team with given Id doesn't exist");
-                return (statusCode, validationErrors);
+                return validation;
             }
-
-            return (statusCode, validationErrors);
+            return validation;
         }
     }
 }

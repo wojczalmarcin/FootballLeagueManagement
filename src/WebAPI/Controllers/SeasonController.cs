@@ -23,7 +23,7 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// Gets season id
+        /// Gets season by id
         /// </summary>
         /// <param name="seasonId">season id</param>
         /// <returns>Response data</returns>

@@ -12,13 +12,11 @@ namespace Application.Services.Team
     /// <summary>
     /// The team service
     /// </summary>
-    public class TeamService : ITeamService
+    public class TeamService : Service , ITeamService
     {
         private readonly ITeamRepository _teamRepository;
 
         private readonly ISeasonRepository _seasonRepository;
-
-        private readonly IMapper _mapper;
 
         private readonly ITeamValidator _teamValidator;
 
@@ -38,10 +36,10 @@ namespace Application.Services.Team
             IMapper mapper,
             ITeamValidator teamValidator,
             ISeasonValidator seasonValidator)
+            : base(mapper)
         {
             _teamRepository = teamRepository;
             _seasonRepository = seasonRepository;
-            _mapper = mapper;
             _teamValidator = teamValidator;
             _seasonValidator = seasonValidator;
         }
@@ -52,23 +50,7 @@ namespace Application.Services.Team
         /// <param name="teamId">team id</param>
         /// <returns>The response data</returns>
         public async Task<ResponseData<TeamDto>> GetTeamByIdAsync(int teamId)
-        {
-            var responseData = new ResponseData<TeamDto>();
-
-            var team = _mapper.Map<TeamDto>(await _teamRepository.GetTeamByIdAsync(teamId));
-            var teamValidation = _teamValidator.ValidateTeamExistence(team);
-
-            responseData.ResponseStatus = teamValidation.statusCode;
-            responseData.ValidationErrors = teamValidation.validationErrors;
-
-            if (teamValidation.statusCode != HttpStatusCode.OK)
-            {
-                return responseData;
-            }
-
-            responseData.Data = team;
-            return responseData;
-        }
+            => await GetByIdAsync<TeamDto, Domain.Entities.Team>(teamId, _teamRepository.GetTeamByIdAsync, _teamValidator.ValidateTeamExistence);
         
 
         /// <summary>
@@ -95,5 +77,13 @@ namespace Application.Services.Team
 
             return responseData;
         }
+
+        /// <summary>
+        /// Edits team
+        /// </summary>
+        /// <param name="team">Team with edited data</param>
+        /// <returns>Response data with edited team</returns>
+        public async Task<ResponseData<TeamDto>> EditTeamAsync(TeamDto team)
+            => await EditAsync(team, _teamRepository.GetTeamByIdAsync, _teamRepository.EditTeamAsync, _teamValidator.ValidateTeamEdit);
     }
 }

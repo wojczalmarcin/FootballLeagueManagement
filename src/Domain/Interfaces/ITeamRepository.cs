@@ -22,5 +22,19 @@ namespace Domain.Interfaces
         /// <param name="seasonId">season id</param>
         /// <returns>Collection of teams</returns>
         Task<IEnumerable<Team>> GetTeamsBySeasonIdAsync(int seasonId);
+
+        /// <summary>
+        /// Adds new team
+        /// </summary>
+        /// <param name="team">The team</param>
+        /// <returns>Returns id of added team. If fails return 0</returns>
+        Task<int> AddTeamAsync(Team team);
+
+        /// <summary>
+        /// Edits team
+        /// </summary>
+        /// <param name="season">The team</param>
+        /// <returns>Returns true if team edited</returns>
+        Task<bool> EditTeamAsync(Team team);
     }
 }

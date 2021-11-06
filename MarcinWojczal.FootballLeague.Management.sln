@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "src\WebAPI\WebAPI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{9E15EBB7-D38E-4C0F-801F-56B3E34161F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactWebApp", "src\ReactWebApp\ReactWebApp.csproj", "{C96FB023-6199-48D7-9411-2CAEE2C43229}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{9E15EBB7-D38E-4C0F-801F-56B3E34161F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E15EBB7-D38E-4C0F-801F-56B3E34161F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E15EBB7-D38E-4C0F-801F-56B3E34161F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C96FB023-6199-48D7-9411-2CAEE2C43229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C96FB023-6199-48D7-9411-2CAEE2C43229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C96FB023-6199-48D7-9411-2CAEE2C43229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C96FB023-6199-48D7-9411-2CAEE2C43229}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{98F5FB1A-DB9F-4405-A64A-6C92A580FF8F} = {3634C804-F31A-48F0-AE71-F8229A8DE6CF}
 		{596F7EAA-E3D5-4BEA-B834-69260319FEE5} = {3634C804-F31A-48F0-AE71-F8229A8DE6CF}
 		{9E15EBB7-D38E-4C0F-801F-56B3E34161F6} = {3634C804-F31A-48F0-AE71-F8229A8DE6CF}
+		{C96FB023-6199-48D7-9411-2CAEE2C43229} = {3634C804-F31A-48F0-AE71-F8229A8DE6CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2CF92248-6F8D-4C99-9581-7A9269895730}

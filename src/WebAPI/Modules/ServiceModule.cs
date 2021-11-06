@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Services;
 using Application.Services.Match;
+using Application.Services.Member;
 using Application.Services.Season;
 using Application.Services.Team;
 using Autofac;
@@ -13,6 +14,7 @@ namespace WebAPI.Modules
             builder.RegisterType<MatchService>().As<IMatchService>();
             builder.RegisterType<SeasonService>().As<ISeasonService>();
             builder.RegisterType<TeamService>().As<ITeamService>();
+            builder.RegisterType<MemberService>().As<IMemberService>();
         }
     }
 }

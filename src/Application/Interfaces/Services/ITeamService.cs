@@ -25,5 +25,12 @@ namespace Application.Interfaces.Services
         /// <param name="seasonId">Seson Id</param>
         /// <returns>The response data</returns>
         Task<ResponseData<IEnumerable<TeamDto>>> GetTeamsBySeasonIdAsync(int seasonId);
+
+        /// <summary>
+        /// Edits team
+        /// </summary>
+        /// <param name="team">Team with edited data</param>
+        /// <returns>Response data with edited team</returns>
+        Task<ResponseData<TeamDto>> EditTeamAsync(TeamDto team);
     }
 }

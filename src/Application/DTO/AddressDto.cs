@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTO
 {
-    public class AddressDto
+    public class AddressDto : IDtoWithId
     {
         public int Id { get; set; }
 

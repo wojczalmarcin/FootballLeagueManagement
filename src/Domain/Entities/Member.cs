@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
@@ -29,6 +30,9 @@ namespace Domain.Entities
         public string Email { get; set; }
 
         public virtual Team Team { get; set; }
+        
         public virtual MemberRole MemberRole { get; set; }
+
+        public virtual IEnumerable<MatchMember> MatchMembers { get; set; }
     }
 }

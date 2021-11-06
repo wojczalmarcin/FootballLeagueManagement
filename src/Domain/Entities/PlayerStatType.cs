@@ -17,7 +17,11 @@ namespace Domain.Entities
         [Key]
         [Column("Id")]
         public int Id { get; set; }
+
         [Column("StatName")]
         public string StatName { get; set; }
+
+        [Column("IsGoal")]
+        public bool IsGoal { get; set; }
     }
 }

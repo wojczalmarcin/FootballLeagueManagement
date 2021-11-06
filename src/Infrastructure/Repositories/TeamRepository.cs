@@ -47,5 +47,29 @@ namespace Infrastructure.Repositories
             .Include(t=>t.Stadium)
             .Include(t => t.Address)
             .Include(t => t.SeasonTeams).Where(t=>t.SeasonTeams.Any(s=>s.SeasonId==seasonId)).ToListAsync();
+
+        /// <summary>
+        /// Adds new team
+        /// </summary>
+        /// <param name="team">The team</param>
+        /// <returns>Returns id of added team. If fails return 0</returns>
+        public async Task<int> AddTeamAsync(Team team)
+        {
+            await _dbContext.Teams.AddAsync(team);
+            if (await _dbContext.SaveChangesAsync() > 0)
+                return team.Id;
+            return 0;
+        }
+
+        /// <summary>
+        /// Edits team
+        /// </summary>
+        /// <param name="season">The team</param>
+        /// <returns>Returns true if team edited</returns>
+        public async Task<bool> EditTeamAsync(Team team)
+        {
+            _dbContext.Teams.Update(team);
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
     }
 }

@@ -15,5 +15,6 @@ namespace Application.Interfaces.Validators
         /// <param name="match">match data transfer object</param>
         /// <returns>Validation result</returns>
         (HttpStatusCode statusCode, List<string> validationErrors) ValidateMatchExistence(MatchDto match);
+
     }
 }

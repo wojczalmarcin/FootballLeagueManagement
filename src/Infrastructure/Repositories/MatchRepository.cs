@@ -58,10 +58,23 @@ namespace Infrastructure.Repositories
         /// </summary>
         /// <param name="teamIds">List of team ids</param>
         /// <returns>Collection of matches</returns>
-        public IEnumerable<Match> GetMatchesByTeamIds(List<int> teamIds)
-        => _dbContext.Matches
+        public async Task<IEnumerable<Match>> GetMatchesByTeamIdsAsync(List<int> teamIds)
+        => await _dbContext.Matches
                 .AsNoTracking()
                 .Include(m => m.MatchScore)
-                .Where(m => teamIds.Contains(m.TeamHomeId)).ToList();
+                .Where(m => teamIds.Contains(m.TeamHomeId)).ToListAsync();
+
+        /// <summary>
+        /// Adds new match
+        /// </summary>
+        /// <param name="season">The season</param>
+        /// <returns>Returns id of added season. If fails return 0</returns>
+        public async Task<int> AddMatchAsync(Match match)
+        {
+            await _dbContext.Matches.AddAsync(match);
+            if (await _dbContext.SaveChangesAsync() > 0)
+                return match.Id;
+            return 0;
+        }
     }
 }

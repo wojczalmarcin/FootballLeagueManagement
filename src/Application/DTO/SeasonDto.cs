@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Application.DTO
 {
-    public class SeasonDto : CreateSeasonDto
+    public class SeasonDto : CreateSeasonDto, IDtoWithId
     {
         public int Id { get; set; }
-
     }
 }

@@ -26,7 +26,7 @@ namespace Domain.Entities
         public int StatTypeId { get; set; }
 
         [Column("StartMinute")]
-        public int StartMinute { get; set; }
+        public int? StartMinute { get; set; }
 
         public virtual Member Player { get; set; }
 
@@ -34,6 +34,6 @@ namespace Domain.Entities
 
         public virtual Team Team { get; set; }
 
-        public virtual PlayerStatType PlayerStatType { get; set; }
+        public virtual PlayerStatType StatType { get; set; }
     }
 }

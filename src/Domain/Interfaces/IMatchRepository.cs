@@ -31,6 +31,13 @@ namespace Domain.Interfaces
         /// </summary>
         /// <param name="teamIds">List of team ids</param>
         /// <returns>Collection of matches</returns>
-        IEnumerable<Match> GetMatchesByTeamIds(List<int> teamIds);
+        Task<IEnumerable<Match>> GetMatchesByTeamIdsAsync(List<int> teamIds);
+
+        /// <summary>
+        /// Adds new match
+        /// </summary>
+        /// <param name="season">The season</param>
+        /// <returns>Returns id of added season. If fails return 0</returns>
+        Task<int> AddMatchAsync(Match match);
     }
 }
