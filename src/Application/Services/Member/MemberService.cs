@@ -52,10 +52,6 @@ namespace Application.Services.Member
 
         //}
 
-        //public async Task<ResponseData<IEnumerable<MemberDto>>> GetMembersByNameMatchAsync(string nameMatch)
-        //{
-        //
-        //}
 
         /// <summary>
         /// Edits member

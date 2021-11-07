@@ -85,6 +85,7 @@ namespace Application.Services.Season
             }
             else
             {
+                responseData.ResponseStatus = HttpStatusCode.InternalServerError;
                 responseData.ValidationErrors.Add("There was a problem with editing season");
             }
 

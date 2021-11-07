@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
-import { HandleResponseError } from '../FetchData/ResponseErrorHandling';
+import { LoadMatchStats } from '../../Services/MatchService';
 
 const MatchStats = () => {
 
@@ -11,20 +11,8 @@ const MatchStats = () => {
     const [matchStats, setMatchStats] = useState([]);
 
     const loadStats = () => {
-        fetch(`Api/Match/Stats/${matchId}`)
-            .then(response => response.json())
-            .then((data) => {
-                if (data.responseStatus !== 200) {
-                    HandleResponseError(data);
-                }
-                else {
-                    setMatchStats(data.data);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                alert(error);
-            })
+        setLoading(true);
+        LoadMatchStats(setMatchStats, matchId)
             .finally(() => {
                 setLoading(false);
             });

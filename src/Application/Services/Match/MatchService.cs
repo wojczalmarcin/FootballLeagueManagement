@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.DTO.Edit;
 using Application.Interfaces;
 using Application.Interfaces.Services;
 using Application.Interfaces.Validators;
@@ -99,6 +100,124 @@ namespace Application.Services.Match
 
             teamStatistics = await matchLogic.CreateSeasonTableAsync(teamStatistics, matches);
             responseData.Data = teamStatistics;
+            return responseData;
+        }
+
+        /// <summary>
+        /// Creates new match
+        /// </summary>
+        /// <param name="match">The match</param>
+        /// <returns>Response data with created match</returns>
+        public async Task<ResponseData<MatchDto>> CreateMatchAsync(CreateMatchDto match)
+        {
+            var responseData = new ResponseData<MatchDto>();
+           
+            var validateCreation = await _matchValidator.ValidateMatchCreation(match);
+
+            responseData.ResponseStatus = validateCreation.statusCode;
+            responseData.ValidationErrors = validateCreation.validationErrors;
+
+            if (validateCreation.statusCode != HttpStatusCode.OK)
+            {
+                return responseData;
+            }
+
+            var matchId = await _matchRepository.AddMatchAsync(_mapper.Map<Domain.Entities.Match>(match));
+
+            if (matchId > 0)
+            {
+                var addedMatch = _mapper.Map<MatchDto>(match);
+                addedMatch.Id = matchId;
+                responseData.Data = addedMatch;
+            }
+            else
+            {
+                responseData.ResponseStatus = HttpStatusCode.InternalServerError;
+                responseData.ValidationErrors.Add("There was a problem with creating match");
+            }
+
+            return responseData;
+        }
+
+        /// <summary>
+        /// Deletes match
+        /// </summary>
+        /// <param name="matchId">The match id</param>
+        /// <returns>Response data with deleted match</returns>
+        public async Task<ResponseData<MatchDto>> DeleteMatchAsync(int matchId)
+        {
+            var responseData = new ResponseData<MatchDto>();
+
+            var match = _mapper.Map<MatchDto> (await _matchRepository.GetMatchByIdAsync(matchId));
+
+            var validateMatchDeletion = _matchValidator.ValidateMatchDeletion(match);
+
+            responseData.ResponseStatus = validateMatchDeletion.statusCode;
+            responseData.ValidationErrors = validateMatchDeletion.validationErrors;
+
+            if (validateMatchDeletion.statusCode != HttpStatusCode.OK)
+            {
+                return responseData;
+            }
+
+            var matchDeletion = await _matchRepository.DeleteMatchAsync(matchId);
+
+            if (matchDeletion)
+            {
+                responseData.Data = match;
+            }
+            else
+            {
+                responseData.ResponseStatus = HttpStatusCode.InternalServerError;
+                responseData.ValidationErrors.Add("There was a problem with creating match");
+            }
+
+            return responseData;
+        }
+
+        /// <summary>
+        /// Creates new match
+        /// </summary>
+        /// <param name="match">The match</param>
+        /// <returns>Response data with created match</returns>
+        public async Task<ResponseData<MatchDto>> EditMatchAsync(EditMatchDto match)
+        {
+            var responseData = new ResponseData<MatchDto>();
+
+            if(match.Id == 0)
+            {
+                responseData.ResponseStatus = HttpStatusCode.BadRequest;
+                responseData.ValidationErrors.Add("The match id was not provided");
+                return responseData;
+            }
+
+            var existingMatch = _mapper.Map<MatchDto>(await _matchRepository.GetMatchByIdAsync(match.Id));
+
+            var validateEdition =  _matchValidator.ValidateMatchEdition(match, existingMatch);
+
+            responseData.ResponseStatus = validateEdition.statusCode;
+            responseData.ValidationErrors = validateEdition.validationErrors;
+
+            if (validateEdition.statusCode != HttpStatusCode.OK)
+            {
+                return responseData;
+            }
+
+            existingMatch.IsFinished = match.IsFinished;
+            existingMatch.Date = match.Date;
+
+            var matchEdited = await _matchRepository.EditMatchAsync(_mapper.Map<Domain.Entities.Match>(existingMatch));
+
+            if (matchEdited)
+            {
+                responseData.Data = existingMatch;
+            }
+            else
+            {
+                responseData.ResponseStatus = HttpStatusCode.InternalServerError;
+                responseData.ValidationErrors.Add("There was a problem with creating match");
+            }
+
             return responseData;
         }
     }

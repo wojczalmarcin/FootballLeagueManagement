@@ -71,13 +71,6 @@ namespace Application.Services.Season
 
         private async Task<(HttpStatusCode statusCode, List<string> validationErrors)> DatesValidationAsync(CreateSeasonDto seasonDto)
         {
-            /*var currentDate = DateTime.Now;
-
-            if (season.StartDate < currentDate)
-            {
-                validationResult.validationErrors.Add("Cannot set season's starting date to past date");
-                validationResult.statusCode = HttpStatusCode.BadRequest;
-            }*/
             (HttpStatusCode statusCode, List<string> validationErrors) validationResult = 
                 (HttpStatusCode.OK, new List<string>());
 

@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.DTO.Edit;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -26,5 +27,26 @@ namespace Application.Interfaces.Services
         /// <param name="seasonId">Season id</param>
         /// <returns>Response data with collection of <see cref="TeamStatisticsDto"/></returns>
         Task<ResponseData<IEnumerable<TeamStatisticsDto>>> GetSeasonTable(int seasonId);
+
+        /// <summary>
+        /// Creates new match
+        /// </summary>
+        /// <param name="match">The match</param>
+        /// <returns>Response data with created match</returns>
+        Task<ResponseData<MatchDto>> CreateMatchAsync(CreateMatchDto match);
+
+        /// <summary>
+        /// Deletes match
+        /// </summary>
+        /// <param name="matchId">The match id</param>
+        /// <returns>Response data with deleted match</returns>
+        Task<ResponseData<MatchDto>> DeleteMatchAsync(int matchId);
+
+        /// <summary>
+        /// Creates new match
+        /// </summary>
+        /// <param name="match">The match</param>
+        /// <returns>Response data with created match</returns>
+        Task<ResponseData<MatchDto>> EditMatchAsync(EditMatchDto match);
     }
 }

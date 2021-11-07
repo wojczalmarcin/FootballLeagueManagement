@@ -1,5 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
 import moment from 'moment'
+import { AddSeason, EditSeason, LoadSeasons } from '../../Services/SeasonService';
 
 const Seasons = () => {
 
@@ -15,17 +16,7 @@ const Seasons = () => {
 
     const loadSeasonsData = () => {
         setLoading(true);
-        fetch('Api/Season')
-            .then(response => response.json())
-            .then((data) => {
-                console.log(data.data);
-                setSeasons(data.data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.log("ERROR");
-                console.log(error);
-            })
+        LoadSeasons(setSeasons)
             .finally(() => {
                 setLoading(false);
             });
@@ -42,21 +33,7 @@ const Seasons = () => {
     };
 
     const handleSave = () => {
-        fetch('api/Season', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(inputs)
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Response:', data);
-                if (data.responseStatus !== 200) {
-                    alert(data.validationErrors);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            })
+        EditSeason(inputs)
             .finally(() => {
                 setEditing(false);
             });
@@ -68,21 +45,7 @@ const Seasons = () => {
     }
 
     const handlePost = () => {
-        fetch('api/Season', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(inputs)
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Response:', data);
-                if (data.responseStatus !== 200) {
-                    alert(data.validationErrors);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            })
+        AddSeason(inputs)
             .finally(() => setAdding(false));
     }
 
@@ -158,20 +121,20 @@ const Seasons = () => {
                                     </td>
                                     <td>
                                         <button className='btn-primary' onClick={handleSave}>Zapisz</button>
-                                        <button className='btn-primary' onClick={() => handleCancelEdit(season)}>Anuluj</button>                
+                                        <button className='btn-primary' onClick={() => handleCancelEdit(season)}>Anuluj</button>
                                     </td>
                                 </tr>)
                         }
                         return (<tr key={season.id}>
                             <td>{new Date(season.startDate).getFullYear() + "/" + (season.endDate ? new Date(season.endDate).getFullYear() : "")}</td>
                             <td>
-                                <input type="date" disabled={true} value ={moment(new Date(season.startDate)).format("YYYY-MM-DD")}/>
+                                <input type="date" disabled={true} value={moment(new Date(season.startDate)).format("YYYY-MM-DD")} />
                             </td>
                             <td>
-                                <input type="date" disabled={true} value ={season.endDate ? moment(new Date(season.endDate)).format("YYYY-MM-DD") : ""}/>
+                                <input type="date" disabled={true} value={season.endDate ? moment(new Date(season.endDate)).format("YYYY-MM-DD") : ""} />
                             </td>
                             <td>
-                                <input disabled={true} value ={season.sponsor}/>
+                                <input disabled={true} value={season.sponsor} />
                             </td>
                             <td>
                                 <button className='btn-invisible' disabled={true}>Anuluj</button>

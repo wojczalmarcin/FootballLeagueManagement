@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.DTO;
+using Application.DTO.Edit;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -94,6 +95,63 @@ namespace WebAPI.Controllers
             try
             {
                 var responseData = await _playerStatsService.GetPlayersStatsByMatchId(matchId);
+                return HttpResponse(responseData);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Creates new match
+        /// </summary>
+        /// <param name="match">The match to create</param>
+        /// <returns>Response data</returns>
+        [HttpPost]
+        public async Task<ActionResult<ResponseData<MatchDto>>> CreateMatch(CreateMatchDto match)
+        {
+            try
+            {
+                var responseData = await _matchService.CreateMatchAsync(match);
+                return HttpResponse(responseData);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Deletes match by id
+        /// </summary>
+        /// <param name="matchId">The match Id</param>
+        /// <returns>Response data</returns>
+        [HttpDelete("Delete/{matchId}")]
+        public async Task<ActionResult<ResponseData<MatchDto>>> DeleteMatch(int matchId)
+        {
+            try
+            {
+                var responseData = await _matchService.DeleteMatchAsync(matchId);
+                return HttpResponse(responseData);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Edits match
+        /// </summary>
+        /// <param name="match">The match to create</param>
+        /// <returns>Response data</returns>
+        [HttpPut]
+        public async Task<ActionResult<ResponseData<MatchDto>>> EditMatch(EditMatchDto match)
+        {
+            try
+            {
+                var responseData = await _matchService.EditMatchAsync(match);
                 return HttpResponse(responseData);
             }
             catch (Exception e)

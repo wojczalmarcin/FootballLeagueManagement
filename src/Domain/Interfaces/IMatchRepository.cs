@@ -39,5 +39,19 @@ namespace Domain.Interfaces
         /// <param name="season">The season</param>
         /// <returns>Returns id of added season. If fails return 0</returns>
         Task<int> AddMatchAsync(Match match);
+
+        /// <summary>
+        /// Delete match
+        /// </summary>
+        /// <param name="matchId">The match id </param>
+        /// <returns>Returns true if match was deleted</returns>
+        Task<bool> DeleteMatchAsync(int matchId);
+
+        /// <summary>
+        /// Edits match
+        /// </summary>
+        /// <param name="match">The match</param>
+        /// <returns>Returns true if match edited</returns>
+        Task<bool> EditMatchAsync(Match match);
     }
 }

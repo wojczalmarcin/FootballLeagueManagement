@@ -13,5 +13,7 @@ namespace Application.DTO
         public int TeamHomeId { get; set; }
 
         public int TeamAwayId { get; set; }
+
+        public int SeasonId { get; set; }
     }
 }

@@ -22,6 +22,8 @@ namespace Infrastructure.AutoMapper
             CreateMap<MemberEditDto, MemberDto>();
             CreateMap<PlayerStatType, PlayerStatTypeDto>().ReverseMap();
             CreateMap<PlayerStatsLog, PlayerStatsDto>().ReverseMap();
+            CreateMap<CreateMatchDto, MatchDto>();
+            CreateMap<CreateMatchDto, Match>();
         }
 
     }

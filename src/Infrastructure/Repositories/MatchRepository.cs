@@ -76,5 +76,32 @@ namespace Infrastructure.Repositories
                 return match.Id;
             return 0;
         }
+
+        /// <summary>
+        /// Delete match
+        /// </summary>
+        /// <param name="matchId">The match id </param>
+        /// <returns>Returns true if match was deleted</returns>
+        public async Task<bool> DeleteMatchAsync(int matchId)
+        {
+            var match = await _dbContext.Matches.FindAsync(matchId);
+            if (match == null)
+                return false;
+
+            _dbContext.Matches.Remove(match);
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
+
+        /// <summary>
+        /// Edits match
+        /// </summary>
+        /// <param name="match">The match</param>
+        /// <returns>Returns true if match edited</returns>
+        public async Task<bool> EditMatchAsync(Match match)
+        {
+            _dbContext.Entry(match).State = EntityState.Modified;
+            _dbContext.Entry(match).Reference(x => x.MatchScore).IsModified = false;
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
     }
 }

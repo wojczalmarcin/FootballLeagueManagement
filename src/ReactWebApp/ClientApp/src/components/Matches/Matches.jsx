@@ -1,7 +1,11 @@
 ﻿import React, { useEffect, useState } from 'react';
 import Dropdown from './Dropdown';
 import { useHistory } from "react-router-dom";
-import { HandleResponseError } from '../FetchData/ResponseErrorHandling';
+import TeamPicker from './TeamPicker';
+import { LoadTeams } from '../../Services/TeamService';
+import moment from 'moment'
+import { LoadSeasonsCurrentSeason } from '../../Services/SeasonService';
+import { AddMatch, DeleteMatch, EditMatch, LoadMatchesBySeasonId } from '../../Services/MatchService';
 
 const Matches = () => {
     const [loading, setLoading] = useState(true);
@@ -12,84 +16,61 @@ const Matches = () => {
 
     const [editing, setEditing] = useState(0);
 
+    const [deleting, setDeleting] = useState(false);
+
     const [adding, setAdding] = useState(false);
 
     const [inputs, setInputs] = useState({});
 
     const [currentSeason, setCurrentSeason] = useState({});
 
+    const [teams, setTeams] = useState([]);
+
+    const [teamHome, setTeamHome] = useState({});
+
+    const [teamAway, setTeamAway] = useState({});
+
     const history = useHistory();
 
     const loadSeasons = () => {
         setLoading(true);
+        LoadSeasonsCurrentSeason(setSeasons, setCurrentSeason);
+    };
 
-        fetch('Api/Season')
-            .then(response => response.json())
-            .then((data) => {
-                if (data.responseStatus !== 200) {
-                    HandleResponseError(data);
-                }
-                else {
-                    setSeasons(data.data);
-                    setCurrentSeason(data.data[0]);
-                }
-            })
-            .catch((error) => {
-                alert(error);
-            })
+    const loadMatches = () => {
+        setLoading(true);
+        LoadTeams(setTeams, currentSeason.id).then(() => {
+            LoadMatchesBySeasonId(setMatches, currentSeason.id);
+        })
             .finally(() => {
                 setLoading(false);
             });
-    };
-
-    const loadMatches = (currentSeasonId) => {
-        fetch(`Api/Match?seasonId=${currentSeasonId}`)
-            .then(response => response.json())
-            .then((matchesData) => {
-                if (matchesData.responseStatus !== 200) {
-                    HandleResponseError(matchesData);
-                }
-                else {
-                    setMatches(matchesData.data);
-                }
-            })
-            .catch((error) => {
-                alert(error);
-            })
     }
 
     const handleStats = (matchId) => {
         history.push(`/match-stats/${matchId}`);
     };
 
-    const handleEdit = (season) => {
-        setInputs(season);
-        setEditing(true);
+    const handleDelete = (matchId) => {
+        setDeleting(true);
+        DeleteMatch(matchId)
+            .finally(() => setDeleting(false))
+    }
+
+    const handleEdit = (match) => {
+        setInputs(match);
+        setEditing(match.id);
     };
 
-    const handleCancelEdit = (season) => {
-        setInputs(season);
-        setEditing(false);
+    const handleCancelEdit = (match) => {
+        setInputs(match);
+        setEditing(0);
     };
 
     const handleSave = () => {
-        fetch('api/Season', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(inputs)
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Response:', data);
-                if (data.responseStatus !== 200) {
-                    alert(data.validationErrors);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            })
+        EditMatch(inputs)
             .finally(() => {
-                setEditing(false);
+                setEditing(0);
             });
     }
 
@@ -99,21 +80,11 @@ const Matches = () => {
     }
 
     const handlePost = () => {
-        fetch('api/Season', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(inputs)
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Response:', data);
-                if (data.responseStatus !== 200) {
-                    alert(data.validationErrors);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            })
+        inputs.teamHomeId = teamHome.id;
+        inputs.teamAwayId = teamAway.id;
+        inputs.seasonId = currentSeason.id;
+
+        AddMatch(inputs)
             .finally(() => setAdding(false));
     }
 
@@ -132,23 +103,28 @@ const Matches = () => {
     }, []);
 
     useEffect(() => {
-        if(currentSeason.id)
-        {
-            loadMatches(currentSeason.id);
+        if (currentSeason.id) {
+            loadMatches();
         }
     }, [currentSeason]);
 
     useEffect(() => {
-        if (editing === false) {
-            loadSeasons();
+        if (editing === false && currentSeason.id) {
+            loadMatches();
         }
     }, [editing]);
 
     useEffect(() => {
-        if (adding === false) {
-            loadSeasons();
+        if (adding === false && currentSeason.id) {
+            loadMatches();
         }
     }, [adding]);
+
+    useEffect(() => {
+        if (currentSeason.id) {
+            loadMatches();
+        }
+    }, [deleting]);
 
     const renderMatches = () => {
         return (
@@ -169,16 +145,73 @@ const Matches = () => {
                             <tr key={match.id}>
                                 <td>{match.teamHome.name}</td>
                                 <td>{match.teamAway.name}</td>
-                                <td>{match.matchScore ? match.matchScore.homeGoals + ":" + match.matchScore.awayGoals : ""}</td>
-                                <td>{match.date}</td>
+                                <td>{match.matchScore && match.isFinished ? match.matchScore.homeGoals + ":" + match.matchScore.awayGoals : ""}</td>
+                                {editing !== match.id ?
+                                    <td>{match.date ?  moment(new Date(match.date)).format("DD.MM.YYYY") : ""}</td>
+                                    :
+                                    <td>
+                                        <input
+                                            name="date"
+                                            type="date"
+                                            value={inputs.date ? moment(new Date(inputs.date)).format("YYYY-MM-DD") : ""}
+                                            onChange={handleInputChange}
+                                            format="DD.MM.yyyy"
+                                        />
+                                    </td>
+                                }
                                 <td>{match.address ? match.address.city + " " + match.address.street + " " + match.address.houseNumber : ""}</td>
-                                <td>
-                                    <button className='btn-primary' disabled={match.matchScore}>Usuń</button>
-                                    <button className='btn-primary'onClick={() => handleStats(match.id)}>Statystyki</button>
-                                </td>
-                            </tr>)
+                                {editing !== match.id ?
+                                    <td>
+                                        <button className='btn-primary' onClick={() => handleDelete(match.id)} disabled={match.isFinished}>Usuń</button>
+                                        <button className='btn-primary' onClick={() => handleEdit(match)} disabled={match.isFinished}>Edytuj</button>
+                                        <button className='btn-primary' onClick={() => handleStats(match.id)}>Statystyki</button>
+                                    </td>
+                                    :
+                                    <td>
+                                        <button className='btn-primary' onClick={() => handleSave()}>Zapisz</button>
+                                        <button className='btn-primary' onClick={() => handleCancelEdit(match)}>Anuluj</button>
+                                        <button className='btn-invisible'>Statystyki</button>
+                                    </td>
+                                }
+                            </tr>
+                        )
                     }
                     )}
+                    {adding ?
+                        <tr>
+                            <td><TeamPicker teams={teams} setCurrentTeam={setTeamHome} team={teamHome} /></td>
+                            <td><TeamPicker teams={teams} setCurrentTeam={setTeamAway} team={teamAway} /></td>
+                            <td></td>
+                            <td>
+                                <input
+                                    name="date"
+                                    type="date"
+                                    value={inputs.date ? moment(new Date(inputs.date)).format("YYYY-MM-DD") : ""}
+                                    onChange={handleInputChange}
+                                    format="DD.MM.yyyy"
+                                />
+                            </td>
+                            <td></td>
+                            <td>
+                                <button className='btn-invisible'>Zapisz</button>
+                                <button className='btn-primary' disabled={editing} onClick={handlePost}>Dodaj</button>
+                                <button className='btn-primary' disabled={editing} onClick={handleCancelAdd}>Anuluj</button>
+                            </td>
+                        </tr>
+                        :
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <button className='btn-invisible'>Zapisz</button>
+                                <button className='btn-invisible'>Anuluj</button>
+                                <button className='btn-primary' disabled={editing} onClick={handleAdd}>Dodaj</button>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
 
