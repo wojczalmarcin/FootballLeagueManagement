@@ -19,6 +19,12 @@ namespace Domain.Interfaces
         /// <returns>The member of the league</returns>
         Task<Member> GetMemberByIdAsync(int memberId);
 
+        /// <summary>
+        /// Gets league player by id
+        /// </summary>
+        /// <param name="playerId">The player Id</param>
+        /// <returns>The member of the league</returns>
+        Task<Member> GetPlayerByIdAsync(int playerId);
 
         /// <summary>
         /// Gets league members by role id
@@ -55,5 +61,13 @@ namespace Domain.Interfaces
         /// <param name="season">The member</param>
         /// <returns>Returns true if member was deleted</returns>
         Task<bool> DeleteMemberAsync(int memberId);
+
+        /// <summary>
+        /// Gets members by match id and role id
+        /// </summary>
+        /// <param name="matchId">The match id</param>
+        /// <param name="roleId">The role id</param>
+        /// <returns>Collection of members</returns>
+        Task<IEnumerable<Member>> GetMembersByMatchIdAndRoleIdAsync(int matchId, int roleId);
     }
 }

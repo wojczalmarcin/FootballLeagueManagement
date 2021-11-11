@@ -129,5 +129,50 @@ namespace Application.Services
 
             return responseData;
         }
+
+        /// <summary>
+        /// Edits entity from given data transfer object
+        /// </summary>
+        /// <typeparam name="Dto">The data transfer object</typeparam>
+        /// <typeparam name="Entity">The entity</typeparam>
+        /// <param name="editDto">The Dto with edited data</param>
+        /// <param name="repositoryFuncGet">Get function from repository</param>
+        /// <param name="repositoryFuncDelete">Edit function from repository</param>
+        /// <param name="validatorFunc">The validation function</param>
+        /// <returns>Response data with edited data</returns>
+        protected async Task<ResponseData<Dto>> DeleteAsync<Dto, Entity>(int entityId,
+            Func<int, Task<Entity>> repositoryFuncGet,
+            Func<int, Task<bool>> repositoryFuncDelete,
+            Func<Dto, (HttpStatusCode statusCode, List<string> validationErrors)> validatorFunc)
+            where Dto : IDtoWithId
+        {
+            var responseData = new ResponseData<Dto>();
+
+            var entity = _mapper.Map<Dto>(await repositoryFuncGet(entityId));
+
+            var validateDeletion = validatorFunc(entity);
+
+            responseData.ResponseStatus = validateDeletion.statusCode;
+            responseData.ValidationErrors = validateDeletion.validationErrors;
+
+            if (validateDeletion.statusCode != HttpStatusCode.OK)
+            {
+                return responseData;
+            }
+
+            var entityDeletion = await repositoryFuncDelete(entityId);
+
+            if (entityDeletion)
+            {
+                responseData.Data = entity;
+            }
+            else
+            {
+                responseData.ResponseStatus = HttpStatusCode.InternalServerError;
+                responseData.ValidationErrors.Add("There was a problem with deleting this data");
+            }
+
+            return responseData;
+        }
     }
 }

@@ -35,7 +35,8 @@ namespace ReactWebApp
             });
 
             services.AddControllers();
-            services.AddDbContext<FootballLeagueDbContext>(x => x.UseSqlServer(this.Configuration.GetConnectionString("FootballLeague")));
+            services.AddDbContext<FootballLeagueDbContext>(x => x.UseSqlServer(this.Configuration.GetConnectionString("FootballLeague")),
+                ServiceLifetime.Transient);
             services.AddAutoMapper(typeof(AutoMapperProfile));
         }
 

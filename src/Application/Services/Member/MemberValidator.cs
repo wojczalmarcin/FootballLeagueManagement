@@ -37,5 +37,13 @@ namespace Application.Services.Member
             }
             return validation;
         }
+
+        /// <summary>
+        /// Validates members existence
+        /// </summary>
+        /// <param name="members">The members</param>
+        /// <returns>Validation result</returns>
+        public (HttpStatusCode statusCode, List<string> validationErrors) ValidateMembersExistence(IEnumerable<MemberDto> members)
+            => ValidateEntitiesExistence(members, "Members do not exist");
     }
 }

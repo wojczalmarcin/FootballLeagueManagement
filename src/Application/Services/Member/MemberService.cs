@@ -20,21 +20,29 @@ namespace Application.Services.Member
 
         private readonly ITeamService _teamService;
 
+        private readonly IMemberRoleRepository _memberRoleRepository;
+
+        private readonly IMemberRoleValidator _memberRoleValidator;
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="memberRepository">The member repository</param>
         /// <param name="mapper">The mapper</param>
         /// <param name="memberValidator">The member validator</param>
-        /// <param name="teamRepository">The team repository</param>
+        /// <param name="memberRoleRepository">The member role repository</param>
         public MemberService(IMemberRepository memberRepository, 
             IMapper mapper, 
             IMemberValidator memberValidator,
-            ITeamService teamService) : base(mapper)
+            ITeamService teamService,
+            IMemberRoleRepository memberRoleRepository,
+            IMemberRoleValidator memberRoleValidator) : base(mapper)
         {
             _memberRepository = memberRepository;
             _memberValidator = memberValidator;
             _teamService = teamService;
+            _memberRoleRepository = memberRoleRepository;
+            _memberRoleValidator = memberRoleValidator;
         }
 
         /// <summary>
@@ -46,6 +54,41 @@ namespace Application.Services.Member
             => await GetByIdAsync<MemberDto, Domain.Entities.Member>(memberId,
                 _memberRepository.GetMemberByIdAsync,
                 _memberValidator.ValidateMemberExistence);
+
+        /// <summary>
+        /// Gets players by match Id
+        /// </summary>
+        /// <param name="matchId">The match Id</param>
+        /// <returns>The response data</returns>
+        public async Task<ResponseData<IEnumerable<MemberDto>>> GetPlayersByMatchIdAsync(int matchId)
+        {
+            var responseData = new ResponseData<IEnumerable<MemberDto>>();
+
+            var playerRole = _mapper.Map<MemberRoleDto>(await _memberRoleRepository.GetPlayerRoleAsync());
+            var playerRoleValidation = _memberRoleValidator.ValidateMemberRoleExistence(playerRole);
+
+            responseData.ResponseStatus = playerRoleValidation.statusCode;
+            responseData.ValidationErrors = playerRoleValidation.validationErrors;
+
+            if (playerRoleValidation.statusCode != HttpStatusCode.OK)
+            {
+                return responseData;
+            }
+
+            var players = _mapper.Map<IEnumerable<MemberDto>>(await _memberRepository.GetMembersByMatchIdAndRoleIdAsync(matchId, playerRole.Id));
+            var membersValidation = _memberValidator.ValidateMembersExistence(players);
+
+            if (membersValidation.statusCode != HttpStatusCode.OK)
+            {
+                responseData.ResponseStatus = membersValidation.statusCode;
+                responseData.ValidationErrors = membersValidation.validationErrors;
+                return responseData;
+            }
+
+            responseData.Data = players;
+
+            return responseData;
+        }
 
         //public async Task<ResponseData<IEnumerable<MemberDto>>> GetMembersByRoleIdAsync(int roleId)
         //{

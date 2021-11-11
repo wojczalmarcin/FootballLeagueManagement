@@ -37,6 +37,18 @@ namespace Infrastructure.Repositories
                     .FirstOrDefaultAsync(m => m.Id == memberId);
 
         /// <summary>
+        /// Gets league player by id
+        /// </summary>
+        /// <param name="playerId">The player Id</param>
+        /// <returns>The member of the league</returns>
+        public async Task<Member> GetPlayerByIdAsync(int playerId)
+            => await _dbContext.Members
+                    .AsNoTracking()
+                    .Include(m => m.MemberRole)
+                    .Include(m => m.Team)
+                    .FirstOrDefaultAsync(m => m.Id == playerId && m.MemberRole.IsPlayer == true);
+
+        /// <summary>
         /// Gets league members by role id
         /// </summary>
         /// <param name="roleId">The role Id</param>
@@ -100,5 +112,19 @@ namespace Infrastructure.Repositories
             _dbContext.Members.Remove(member);
             return await _dbContext.SaveChangesAsync() > 0;
         }
+
+        /// <summary>
+        /// Gets members by match id and role id
+        /// </summary>
+        /// <param name="matchId">The match id</param>
+        /// <param name="roleId">The role id</param>
+        /// <returns>Collection of members</returns>
+        public async Task<IEnumerable<Member>> GetMembersByMatchIdAndRoleIdAsync(int matchId, int roleId)
+            => await this._dbContext.Members
+            .AsNoTracking()
+            .Include(m => m.Team)
+            .Include(m => m.MatchMembers)
+            .Where(m => m.MatchMembers.Any(x => x.MatchId == matchId) && m.MemberRoleId == roleId)
+            .ToListAsync();
     }
 }

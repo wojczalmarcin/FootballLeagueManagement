@@ -38,8 +38,8 @@ INSERT INTO dbo.FL_LG_PlayerStatType (StatName, IsGoal)
 VALUES ('Bramka', 1),('¯ó³ta kratka',0 ),('Czerwona kartka', 0),('Asysta', 0);
 GO
 
-INSERT INTO dbo.FL_TB_Season (STartDate)
-VALUES ('2020-07-01');
+INSERT INTO dbo.FL_TB_Season (StartDate, EndDate)
+VALUES ('2020-07-01', '2021-06-30');
 GO
 
 INSERT INTO dbo.FL_TB_SeasonTeam
@@ -69,56 +69,24 @@ VALUES  (1, 2, 1, 1),
 		(5, 6, 1, 1);
 GO
 
-DECLARE @cnt INT = 1;
+DECLARE @matchCount INT = 1;
 
-WHILE @cnt < 6
+WHILE @matchCount < 16
 BEGIN
-   INSERT INTO dbo.FL_TB_MatchMember (MatchId, MemberId, IsMemberInHomeTeam)
-	   VALUES (1,1, 1),
-			  (1,2, 1),
-			  (1,(@cnt*2)+1, 0),
-			  (1,(@cnt*2)+2, 0);
-	SET @cnt = @cnt + 1;
-END;
+	DECLARE @TeamHomeId INT = (SELECT TeamHomeId FROM FL_TB_Match WHERE Id = @matchCount);
+	DECLARE @TeamAwayId INT = (SELECT TeamAwayId FROM FL_TB_Match WHERE Id = @matchCount);
+	DECLARE @Player1Id INT = (SELECT TOP 1 Id FROM FL_TB_Member WHERE TeamId = @TeamHomeId ORDER BY Id);
+	DECLARE @Player2Id INT = (SELECT TOP 1 Id FROM FL_TB_Member WHERE TeamId = @TeamHomeId ORDER BY Id DESC);
+	DECLARE @Player3Id INT = (SELECT TOP 1 Id FROM FL_TB_Member WHERE TeamId = @TeamAwayId ORDER BY Id);
+	DECLARE @Player4Id INT = (SELECT TOP 1 Id FROM FL_TB_Member WHERE TeamId = @TeamAwayId ORDER BY Id DESC);
 
-SET @cnt = 2;
-WHILE @cnt < 6
-BEGIN
-   INSERT INTO dbo.FL_TB_MatchMember (MatchId, MemberId, IsMemberInHomeTeam)
-	   VALUES (2,3, 1),
-			  (2,4, 1),
-			  (2,(@cnt*2)+1, 0),
-			  (2,(@cnt*2)+2, 0);
-	SET @cnt = @cnt + 1;
+	INSERT INTO dbo.FL_TB_MatchMember (MatchId, MemberId, IsMemberInHomeTeam)
+	   VALUES (@matchCount,@Player1Id, 1),
+			  (@matchCount,@Player2Id, 1),
+			  (@matchCount,@Player3Id, 0),
+			  (@matchCount,@Player4Id, 0);
+	SET @matchCount = @matchCount + 1;
 END;
-
-SET @cnt = 3;
-WHILE @cnt < 6
-BEGIN
-   INSERT INTO dbo.FL_TB_MatchMember (MatchId, MemberId, IsMemberInHomeTeam)
-	   VALUES (3,5, 1),
-			  (3,6, 1),
-			  (3,(@cnt*2)+1, 0),
-			  (3,(@cnt*2)+2, 0);
-	SET @cnt = @cnt + 1;
-END;
-
-SET @cnt = 4;
-WHILE @cnt < 6
-BEGIN
-   INSERT INTO dbo.FL_TB_MatchMember (MatchId, MemberId, IsMemberInHomeTeam)
-	   VALUES (4,7, 1),
-			  (4,8, 1),
-			  (4,(@cnt*2)+1, 0),
-			  (4,(@cnt*2)+2, 0);
-	SET @cnt = @cnt + 1;
-END;
-
-INSERT INTO dbo.FL_TB_MatchMember (MatchId, MemberId, IsMemberInHomeTeam)
-VALUES	(5,9, 1),
-		(5,10, 1),
-		(5,11, 0),
-		(5,12, 0);
 
 -- Cards
 INSERT INTO dbo.FL_LG_PlayerStatsLog (MatchId, PlayerId, TeamId, StatTypeId, StartMinute)

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import classes from "./Dropdown.module.css";
+import classes from "../Dropdown.module.css";
 
-const TeamPicker = (props) => {
+const StatTypePicker = (props) => {
 
     const [toggle, setToggle] = useState(false);
 
-    const handleClick = (team) => {
-        props.setCurrentTeam(team);
+    const handleClick = (statType) => {
+        props.setStatType(statType);
         setToggle(false);
     }
 
@@ -14,17 +14,17 @@ const TeamPicker = (props) => {
         <div className={classes.dropdown}>
             <input
                 readOnly
-                name="teamHome"
+                name="statType"
                 type="text"
-                value={props.team.name}
+                value={props.statType.statName}
                 onClick={() => setToggle(!toggle)}
             />
-            {toggle && props.teams.length > 0 ?
+            {toggle && props.statTypes.length > 0 ?
                 <div className={classes.dropdownContent}>
-                    {props.teams.map(team => {
+                    {props.statTypes.map(statType => {
                         return (
-                            <p key={team.id} onClick={() => handleClick(team)}>
-                                {team.name}
+                            <p key={statType.id} onClick={() => handleClick(statType)}>
+                                {statType.statName}
                             </p>
                         )
                     })
@@ -37,4 +37,4 @@ const TeamPicker = (props) => {
     );
 }
 
-export default TeamPicker;
+export default StatTypePicker;

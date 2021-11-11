@@ -71,5 +71,49 @@ namespace Application.Services.PlayerStats
             responseData.Data = playersStats;
             return responseData;
         }
+
+        /// <summary>
+        /// Creates new player stats
+        /// </summary>
+        /// <param name="playerStatsToCreate">The player stats to create</param>
+        /// <returns>Response data with created player stats</returns>
+        public async Task<ResponseData<PlayerStatsDto>> CreatePlayerStats(CreatePlayerStatsDto playerStatsToCreate)
+        {
+            var responseData = new ResponseData<PlayerStatsDto>();
+
+            var creationValidation = await _playerStatsValidator.ValidatePlayerStatsCreationAsync(playerStatsToCreate);
+
+            responseData.ResponseStatus = creationValidation.statusCode;
+            responseData.ValidationErrors = creationValidation.validationErrors;
+
+            if (creationValidation.statusCode != HttpStatusCode.OK)
+            {
+                return responseData;
+            }
+
+            var playerStatsId = await _playerStatsLogRepository.AddPlayersStatsAsync(_mapper.Map<Domain.Entities.PlayerStatsLog>(playerStatsToCreate));
+
+            if (playerStatsId > 0)
+            {
+                var addedPlayerStast = _mapper.Map<PlayerStatsDto>(playerStatsToCreate);
+                addedPlayerStast.Id = playerStatsId;
+            }
+            else
+            {
+                responseData.ValidationErrors.Add("There was a problem with creating player stats");
+            }
+
+            return responseData;
+        }
+
+        /// <summary>
+        /// Deletes player stats by od
+        /// </summary>
+        /// <param name="playerStatsId">The player stats id</param>
+        /// <returns>Response data with deleted player stats</returns>
+        public async Task<ResponseData<PlayerStatsDto>> DeletePlayerStats(int playerStatsId)
+            => await this.DeleteAsync<PlayerStatsDto, Domain.Entities.PlayerStatsLog>(playerStatsId, _playerStatsLogRepository.GetPlayerStatsLogByIdAsync,
+                _playerStatsLogRepository.DeletePlayerStatsLogAsync, _playerStatsValidator.ValidatePlayerStatsDeletion);
+
     }
 }

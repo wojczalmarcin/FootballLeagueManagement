@@ -24,7 +24,7 @@ namespace Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Gets player by id
+        /// Gets player stats log by id
         /// </summary>
         /// <param name="playerStatsLogId">The player stats log id</param>
         /// <returns>Player stats log</returns>
@@ -60,5 +60,33 @@ namespace Infrastructure.Repositories
                 .Include(p => p.Team)
                 .Where(p => p.MatchId == matchId)
                 .ToListAsync();
+
+        /// <summary>
+        /// Adds new player stats
+        /// </summary>
+        /// <param name="playerStatsLog">The player stats log</param>
+        /// <returns>Returns id of added player stats log. If fails return 0</returns>
+        public async Task<int> AddPlayersStatsAsync(PlayerStatsLog playerStatsLog)
+        {
+            await _dbContext.PlayersStatsLogs.AddAsync(playerStatsLog);
+            if (await _dbContext.SaveChangesAsync() > 0)
+                return playerStatsLog.Id;
+            return 0;
+        }
+
+        /// <summary>
+        /// Delete player stats log
+        /// </summary>
+        /// <param name="playerStatsLogId">The player stats log id </param>
+        /// <returns>Returns true if player stats log was deleted</returns>
+        public async Task<bool> DeletePlayerStatsLogAsync(int playerStatsLogId)
+        {
+            var playerStatsLog = await _dbContext.PlayersStatsLogs.FindAsync(playerStatsLogId);
+            if (playerStatsLog == null)
+                return false;
+
+            _dbContext.PlayersStatsLogs.Remove(playerStatsLog);
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
     }
 }

@@ -1,4 +1,4 @@
-import { HandleResponseError } from "./ResponseErrorHandling";
+import { HandleResponseError, HandleResponseErrorGet } from "./ResponseErrorHandling";
 
 export const LoadTeams = (setTeams, seasonId) => {
     return(
@@ -6,7 +6,7 @@ export const LoadTeams = (setTeams, seasonId) => {
         .then(response => response.json())
         .then((data) => {
             if (data.responseStatus !== 200) {
-                HandleResponseError(data);
+                HandleResponseErrorGet(data);
             }
             else {
                 setTeams(data.data);

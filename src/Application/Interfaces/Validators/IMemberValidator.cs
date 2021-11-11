@@ -23,5 +23,12 @@ namespace Application.Interfaces.Validators
         /// <param name="teamToEdit">The member to edit</param>
         /// <returns>Validation result</returns>
         (HttpStatusCode statusCode, List<string> validationErrors) ValidateMemberEdit(MemberDto member, MemberDto memberToEdit);
+
+        /// <summary>
+        /// Validates members existence
+        /// </summary>
+        /// <param name="members">The members</param>
+        /// <returns>Validation result</returns>
+        (HttpStatusCode statusCode, List<string> validationErrors) ValidateMembersExistence(IEnumerable<MemberDto> members);
     }
 }

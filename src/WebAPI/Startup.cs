@@ -30,7 +30,8 @@ namespace WebAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
             });
-            services.AddDbContext<FootballLeagueDbContext>(x => x.UseSqlServer(this.Configuration.GetConnectionString("FootballLeague")));
+            services.AddDbContext<FootballLeagueDbContext>(x => x.UseSqlServer(this.Configuration.GetConnectionString("FootballLeague")),
+                ServiceLifetime.Transient);
             services.AddAutoMapper(typeof(AutoMapperProfile));
         }
 

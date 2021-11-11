@@ -1,4 +1,4 @@
-import { HandleResponseError } from "./ResponseErrorHandling";
+import { HandleResponseError, HandleResponseErrorGet } from "./ResponseErrorHandling";
 
 export const LoadMatchesBySeasonId = (setMatches, currentSeasonId) => {
     return (
@@ -6,10 +6,28 @@ export const LoadMatchesBySeasonId = (setMatches, currentSeasonId) => {
             .then(response => response.json())
             .then((data) => {
                 if (data.responseStatus !== 200) {
-                    HandleResponseError(data);
+                    HandleResponseErrorGet(data);
                 }
                 else {
                     setMatches(data.data);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            })
+    );
+}
+
+export const LoadMatchById = (setMatch, matchId) => {
+    return (
+        fetch(`Api/Match/${matchId}`)
+            .then(response => response.json())
+            .then((data) => {
+                if (data.responseStatus !== 200) {
+                    HandleResponseErrorGet(data);
+                }
+                else {
+                    setMatch(data.data);
                 }
             })
             .catch((error) => {
@@ -69,24 +87,6 @@ export const AddMatch = (inputs) => {
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-            })
-    );
-}
-
-export const LoadMatchStats = (setMatchStats, matchId) => {
-    return (
-        fetch(`Api/Match/Stats/${matchId}`)
-            .then(response => response.json())
-            .then((data) => {
-                if (data.responseStatus !== 200) {
-                    HandleResponseError(data);
-                }
-                else {
-                    setMatchStats(data.data);
-                }
-            })
-            .catch((error) => {
                 console.error('Error:', error);
             })
     );

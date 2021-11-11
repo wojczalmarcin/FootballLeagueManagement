@@ -23,5 +23,12 @@ namespace Application.Interfaces.Services
         /// <param name="member">The member</param>
         /// <returns>Response data with edited member</returns>
         Task<ResponseData<MemberDto>> EditMemberAsync(MemberEditDto memberEdit);
+
+        /// <summary>
+        /// Gets players by match Id
+        /// </summary>
+        /// <param name="matchId">The match Id</param>
+        /// <returns>The response data</returns>
+        Task<ResponseData<IEnumerable<MemberDto>>> GetPlayersByMatchIdAsync(int matchId);
     }
 }

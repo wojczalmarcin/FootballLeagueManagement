@@ -1,16 +1,15 @@
 import { HandleResponseError, HandleResponseErrorGet } from "./ResponseErrorHandling";
 
-export const LoadSeasonsCurrentSeason = (setSeasons, setCurrentSeason) => {
+export const LoadMatchStats = (setMatchStats, matchId) => {
     return (
-        fetch('Api/Season')
+        fetch(`Api/PlayerStats?matchId=${matchId}`)
             .then(response => response.json())
             .then((data) => {
                 if (data.responseStatus !== 200) {
                     HandleResponseErrorGet(data);
                 }
                 else {
-                    setSeasons(data.data);
-                    setCurrentSeason(data.data[0]);
+                    setMatchStats(data.data);
                 }
             })
             .catch((error) => {
@@ -19,16 +18,16 @@ export const LoadSeasonsCurrentSeason = (setSeasons, setCurrentSeason) => {
     );
 }
 
-export const LoadSeasons = (setSeasons) => {
+export const LoadStatTypes = (setStatTypes) => {
     return (
-        fetch('Api/Season')
+        fetch(`Api/PlayerStats/Type`)
             .then(response => response.json())
             .then((data) => {
                 if (data.responseStatus !== 200) {
                     HandleResponseErrorGet(data);
                 }
                 else {
-                    setSeasons(data.data);
+                    setStatTypes(data.data);
                 }
             })
             .catch((error) => {
@@ -37,10 +36,10 @@ export const LoadSeasons = (setSeasons) => {
     );
 }
 
-export const EditSeason = (inputs) => {
+export const AddPlayerStat = (inputs) => {
     return (
-        fetch('api/Season', {
-            method: 'PUT',
+        fetch('api/PlayerStats', {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(inputs)
         })
@@ -56,12 +55,10 @@ export const EditSeason = (inputs) => {
     );
 }
 
-export const AddSeason = (inputs) => {
+export const DeletePlayerStat = (playerStatId) => {
     return (
-        fetch('api/Season', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(inputs)
+        fetch(`api/PlayerStats/${playerStatId}`, {
+            method: 'DELETE',
         })
             .then(response => response.json())
             .then(data => {

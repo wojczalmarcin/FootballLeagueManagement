@@ -14,6 +14,9 @@ namespace WebAPI.Modules
             builder.RegisterType<SeasonRepository>().As<ISeasonRepository>();
             builder.RegisterType<MemberRepository>().As<IMemberRepository>();
             builder.RegisterType<PlayerStatsLogRepository>().As<IPlayerStatsLogRepository>();
+            builder.RegisterType<MemberRoleRepository>().As<IMemberRoleRepository>();
+            builder.RegisterType<PlayerStatTypeRepository>().As<IPlayerStatTypeRepository>();
+            
         }
     }
 }

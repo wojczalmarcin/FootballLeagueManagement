@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import Dropdown from './Dropdown';
 import { useHistory } from "react-router-dom";
-import TeamPicker from './TeamPicker';
+import TeamPicker from './Pickers/TeamPicker';
 import { LoadTeams } from '../../Services/TeamService';
 import moment from 'moment'
 import { LoadSeasonsCurrentSeason } from '../../Services/SeasonService';
@@ -75,7 +75,6 @@ const Matches = () => {
     }
 
     const handleAdd = () => {
-        setInputs({ startDate: "", endDate: "", sponsor: "" });
         setAdding(true);
     }
 
@@ -83,7 +82,6 @@ const Matches = () => {
         inputs.teamHomeId = teamHome.id;
         inputs.teamAwayId = teamAway.id;
         inputs.seasonId = currentSeason.id;
-
         AddMatch(inputs)
             .finally(() => setAdding(false));
     }
@@ -94,7 +92,11 @@ const Matches = () => {
 
     const handleInputChange = (event) => {
         const name = event.target.name;
-        const value = event.target.value;
+        var value = event.target.value;
+        if(name === "date" && !value)
+        {
+            value = null;
+        }
         setInputs(values => ({ ...values, [name]: value }))
     };
 
@@ -109,7 +111,7 @@ const Matches = () => {
     }, [currentSeason]);
 
     useEffect(() => {
-        if (editing === false && currentSeason.id) {
+        if (editing === 0 && currentSeason.id) {
             loadMatches();
         }
     }, [editing]);
@@ -147,7 +149,7 @@ const Matches = () => {
                                 <td>{match.teamAway.name}</td>
                                 <td>{match.matchScore && match.isFinished ? match.matchScore.homeGoals + ":" + match.matchScore.awayGoals : ""}</td>
                                 {editing !== match.id ?
-                                    <td>{match.date ?  moment(new Date(match.date)).format("DD.MM.YYYY") : ""}</td>
+                                    <td>{match.date ? moment(new Date(match.date)).format("DD.MM.YYYY") : ""}</td>
                                     :
                                     <td>
                                         <input
@@ -170,7 +172,7 @@ const Matches = () => {
                                     <td>
                                         <button className='btn-primary' onClick={() => handleSave()}>Zapisz</button>
                                         <button className='btn-primary' onClick={() => handleCancelEdit(match)}>Anuluj</button>
-                                        <button className='btn-invisible'>Statystyki</button>
+                                        <button className='btn-invisible' disabled={true}>Statystyki</button>
                                     </td>
                                 }
                             </tr>
@@ -193,7 +195,7 @@ const Matches = () => {
                             </td>
                             <td></td>
                             <td>
-                                <button className='btn-invisible'>Zapisz</button>
+                                <button className='btn-invisible' disabled={true}>Zapisz</button>
                                 <button className='btn-primary' disabled={editing} onClick={handlePost}>Dodaj</button>
                                 <button className='btn-primary' disabled={editing} onClick={handleCancelAdd}>Anuluj</button>
                             </td>
@@ -206,8 +208,8 @@ const Matches = () => {
                             <td></td>
                             <td></td>
                             <td>
-                                <button className='btn-invisible'>Zapisz</button>
-                                <button className='btn-invisible'>Anuluj</button>
+                                <button className='btn-invisible' disabled={true}>Zapisz</button>
+                                <button className='btn-invisible' disabled={true}>Anuluj</button>
                                 <button className='btn-primary' disabled={editing} onClick={handleAdd}>Dodaj</button>
                             </td>
                         </tr>

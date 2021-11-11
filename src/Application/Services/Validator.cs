@@ -35,7 +35,7 @@ namespace Application.Services
         /// <summary>
         /// Validates if entity exists based on given dto of this entity
         /// </summary>
-        /// <param name="dto">The dto</param>
+        /// <param name="dtoList">The list of dtos</param>
         /// <param name="message">the error message</param>
         /// <returns>Validation result</returns>
         protected (HttpStatusCode statusCode, List<string> validationErrors) ValidateEntitiesExistence(IEnumerable<IDtoWithId> dtoList, string message)

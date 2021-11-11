@@ -85,25 +85,6 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// Gets players stats by match id
-        /// </summary>
-        /// <param name="matchId">The match id</param>
-        /// <returns>Response data with stats</returns>
-        [HttpGet("Stats/{matchId}")]
-        public async Task<ActionResult<ResponseData<IEnumerable<PlayerStatsDto>>>> GetPlayersStatsByMatchId(int matchId)
-        {
-            try
-            {
-                var responseData = await _playerStatsService.GetPlayersStatsByMatchId(matchId);
-                return HttpResponse(responseData);
-            }
-            catch (Exception e)
-            {
-                return Problem(e.Message);
-            }
-        }
-
-        /// <summary>
         /// Creates new match
         /// </summary>
         /// <param name="match">The match to create</param>

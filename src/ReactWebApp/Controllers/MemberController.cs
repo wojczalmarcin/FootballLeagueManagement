@@ -23,18 +23,37 @@ namespace WebAPI.Controllers
         {
             _memberService = memberService;
         }
-
+        
         /// <summary>
         /// Gets member by id
         /// </summary>
         /// <param name="memberId">The member id</param>
         /// <returns>Response data</returns>
         [HttpGet("{memberId}")]
-        public async Task<ActionResult<ResponseData<MemberDto>>> GetSeasonByIdAsync(int memberId)
+        public async Task<ActionResult<ResponseData<MemberDto>>> GetMemberByIdAsync(int memberId)
         {
             try
             {
                 var responseData = await _memberService.GetMemberByIdAsync(memberId);
+                return HttpResponse(responseData);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Gets members by match id
+        /// </summary>
+        /// <param name="matchId">The match id</param>
+        /// <returns>Response data</returns>
+        [HttpGet("match/{matchId}")]
+        public async Task<ActionResult<ResponseData<MemberDto>>> GetPlayersByMatchId(int matchId)
+        {
+            try
+            {
+                var responseData = await _memberService.GetPlayersByMatchIdAsync(matchId);
                 return HttpResponse(responseData);
             }
             catch (Exception e)

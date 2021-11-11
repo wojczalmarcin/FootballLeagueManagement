@@ -44,9 +44,11 @@ namespace Infrastructure.Repositories
         public async Task<IEnumerable<Team>> GetTeamsBySeasonIdAsync(int seasonId)
             => await this._dbContext.Teams
             .AsNoTracking()
-            .Include(t=>t.Stadium)
+            .Include(t => t.Stadium)
             .Include(t => t.Address)
-            .Include(t => t.SeasonTeams).Where(t=>t.SeasonTeams.Any(s=>s.SeasonId==seasonId)).ToListAsync();
+            .Include(t => t.SeasonTeams)
+            .Where(t => t.SeasonTeams.Any(s=>s.SeasonId==seasonId))
+            .ToListAsync();
 
         /// <summary>
         /// Adds new team
