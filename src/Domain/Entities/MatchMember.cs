@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
@@ -23,6 +18,12 @@ namespace Domain.Entities
 
         [Column("IsMemberInHomeTeam")]
         public bool IsMemberInHomeTeam { get; set; }
+
+        [Column("AppearanceMinute")]
+        public int AppearanceMinute { get; set; }
+
+        [Column("MinutesPlayed")]
+        public int MinutesPlayed { get; set; }
 
         public virtual Match Match { get; set; }
 

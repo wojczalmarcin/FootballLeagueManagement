@@ -28,7 +28,7 @@ namespace Application.Services.Member
         /// <param name="team">The member</param>
         /// <param name="teamToEdit">The member to edit</param>
         /// <returns>Validation result</returns>
-        public (HttpStatusCode statusCode, List<string> validationErrors) ValidateMemberEdit(MemberDto member, MemberDto memberToEdit)
+        public (HttpStatusCode statusCode, List<string> validationErrors) ValidateMemberEdit(MemberEditDto member, MemberDto memberToEdit)
         {
             (HttpStatusCode statusCode, List<string> validationErrors) validation = this.ValidateMemberExistence(memberToEdit);
             if (validation.statusCode != HttpStatusCode.OK)

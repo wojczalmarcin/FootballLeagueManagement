@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.DTO.Create;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,10 +28,23 @@ namespace Application.Interfaces.Services
         Task<ResponseData<IEnumerable<TeamDto>>> GetTeamsBySeasonIdAsync(int seasonId);
 
         /// <summary>
+        /// Gets all teams
+        /// </summary>
+        /// <returns>The response data</returns>
+        Task<ResponseData<IEnumerable<TeamDto>>> GetAllTeams();
+
+        /// <summary>
         /// Edits team
         /// </summary>
         /// <param name="team">Team with edited data</param>
         /// <returns>Response data with edited team</returns>
         Task<ResponseData<TeamDto>> EditTeamAsync(TeamDto team);
+
+        /// <summary>
+        /// Creates given team
+        /// </summary>
+        /// <param name="team">The team to create</param>
+        /// <returns>Response data with created team</returns>
+        Task<ResponseData<TeamDto>> CreateTeamAsync(CreateTeamDto team);
     }
 }

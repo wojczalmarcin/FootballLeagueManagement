@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
         /// <param name="seasonId">season id</param>
         /// <returns>Response data</returns>
         [HttpGet("{seasonId}")]
-        public async Task<ActionResult<ResponseData<SeasonDto>>> GetSeasonByIdAsync(int seasonId)
+        public async Task<ActionResult> GetSeasonByIdAsync(int seasonId)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <returns>Response data</returns>
         [HttpGet]
-        public async Task<ActionResult<ResponseData<SeasonDto>>> GetAllSeasonsAsync()
+        public async Task<ActionResult> GetAllSeasonsAsync()
         {
             try
             {
@@ -65,7 +65,7 @@ namespace WebAPI.Controllers
         /// <param name="season">Season to put</param>
         /// <returns>Response data</returns>
         [HttpPut]
-        public async Task<ActionResult<ResponseData<SeasonDto>>> PutAsync([FromBody] SeasonDto season)
+        public async Task<ActionResult> PutAsync([FromBody] SeasonDto season)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace WebAPI.Controllers
         /// <param name="season">Season to put</param>
         /// <returns>Response data</returns>
         [HttpPost]
-        public async Task<ActionResult<ResponseData<SeasonDto>>> PostAsync([FromBody] CreateSeasonDto season)
+        public async Task<ActionResult> PostAsync([FromBody] CreateSeasonDto season)
         {
             try
             {

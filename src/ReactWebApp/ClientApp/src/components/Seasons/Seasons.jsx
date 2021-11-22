@@ -120,8 +120,8 @@ const Seasons = () => {
                                         />
                                     </td>
                                     <td>
-                                        <button className='btn-primary' onClick={handleSave}>Zapisz</button>
                                         <button className='btn-primary' onClick={() => handleCancelEdit(season)}>Anuluj</button>
+                                        <button className='btn-primary' onClick={handleSave}>Zapisz</button>                                
                                     </td>
                                 </tr>)
                         }
@@ -137,8 +137,8 @@ const Seasons = () => {
                                 <input disabled={true} value={season.sponsor} />
                             </td>
                             <td>
-                                <button className='btn-invisible' disabled={true}>Anuluj</button>
                                 <button className='btn-primary' disabled={editing} onClick={() => handleEdit(season)}>Edytuj</button>
+                                <button className='btn-invisible' disabled={true}>Anuluj</button>
                             </td>
                         </tr>)
                     }
@@ -173,8 +173,8 @@ const Seasons = () => {
                                 />
                             </td>
                             <td>
-                                <button className='btn-primary' disabled={editing} onClick={handlePost}>Dodaj</button>
                                 <button className='btn-primary' disabled={editing} onClick={handleCancelAdd}>Anuluj</button>
+                                <button className='btn-primary' disabled={editing} onClick={handlePost}>Dodaj</button>           
                             </td>
                         </tr>
                         :
@@ -184,8 +184,8 @@ const Seasons = () => {
                             <td></td>
                             <td></td>
                             <td>
-                                <button className='btn-invisible' disabled={true}>Anuluj</button>
                                 <button className='btn-primary' disabled={editing} onClick={handleAdd}>Dodaj</button>
+                                <button className='btn-invisible' disabled={true}>Anuluj</button>
                             </td>
                         </tr>}
                 </tbody>

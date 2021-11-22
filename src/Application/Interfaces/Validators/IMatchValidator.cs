@@ -41,5 +41,12 @@ namespace Application.Interfaces.Validators
         /// <returns>Validation result</returns>
         (HttpStatusCode statusCode, List<string> validationErrors) ValidateMatchEdition(EditMatchDto editedMatch, MatchDto existingMatch);
 
+        /// <summary>
+        /// Validates finishng the match
+        /// </summary>
+        /// <param name="match">The match</param>
+        /// <returns>Validation result</returns>
+        (HttpStatusCode statusCode, List<string> validationErrors) ValidateMatchFinishing(MatchDto match);
+
     }
 }

@@ -22,7 +22,7 @@ namespace Application.Interfaces.Validators
         /// <param name="team">The member</param>
         /// <param name="teamToEdit">The member to edit</param>
         /// <returns>Validation result</returns>
-        (HttpStatusCode statusCode, List<string> validationErrors) ValidateMemberEdit(MemberDto member, MemberDto memberToEdit);
+        (HttpStatusCode statusCode, List<string> validationErrors) ValidateMemberEdit(MemberEditDto member, MemberDto memberToEdit);
 
         /// <summary>
         /// Validates members existence

@@ -66,13 +66,49 @@ namespace Infrastructure.Repositories
         /// </summary>
         /// <param name="roleId">The role Id</param>
         /// <param name="teamId">The team Id</param>
-        /// <returns>The member of the league</returns>
+        /// <returns>The members of the league</returns>
         public async Task<IEnumerable<Member>> GetMembersByRoleIdAsync(int roleId, int teamId)
             => await _dbContext.Members
                 .AsNoTracking()
                 .Include(m => m.MemberRole)
                 .Where(m => m.MemberRoleId == roleId && m.TeamId == teamId)
                 .ToListAsync();
+
+        /// <summary>
+        /// Gets members by team id, page size and page number
+        /// </summary>
+        /// <param name="page">The page</param>
+        /// <param name="teamId">The team id</param>
+        /// <returns>The members of the league</returns>
+        public async Task<IEnumerable<Member>> GetMembersByTeamIdAsync((int size, int number) page, int teamId)
+            => await _dbContext.Members
+                .AsNoTracking()
+                .Include(m => m.MemberRole)
+                .Include(m => m.Team)
+                .Where(m => m.TeamId == teamId)
+                .Skip(page.size*(page.number - 1))
+                .Take(page.size)
+                .ToListAsync();
+
+        /// <summary>
+        /// Gets the number of members in given team
+        /// </summary>
+        /// <param name="teamId">The team id</param>
+        /// <returns>Number of members</returns>
+        public async Task<int> CountMembersByTeamIdAsync(int teamId)
+            => await _dbContext.Members
+                .Where(m => m.TeamId == teamId)
+                .AsNoTracking()
+                .CountAsync();
+
+        /// <summary>
+        /// Gets the number of members
+        /// </summary>
+        /// <returns>Number of members</returns>
+        public async Task<int> CountMembersAsync()
+            => await _dbContext.Members
+                .AsNoTracking()
+                .CountAsync();
 
         /// <summary>
         /// Adds new member

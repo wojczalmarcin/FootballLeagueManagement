@@ -14,8 +14,19 @@ code {
   margin: 1%;
   width: 5rem;
 }
+
+.btn-primary-bigger {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+  margin: 1%;
+  width: 7rem;
+}
+.btn-primary-bigger:hover {
+  background-color: #006fdd;
+}
 .btn-primary:disabled {
-    background-color: gray;
+  background-color: gray;
 }
 .btn-invisible {
   color: rgb(0,0,0,0);
@@ -23,4 +34,27 @@ code {
   border-color: rgb(0,0,0,0);
   margin: 1%;
   width: 5rem;
+}
+.paginate {
+  float: right;
+}
+.paginate li {
+  padding-left: 7px;
+  padding-right: 7px;
+  display: inline-block;
+  cursor: pointer;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(212, 212, 212);
+}
+.paginate-page {
+  color: #1b6ec2;
+}
+.paginate-current-page {
+  background-color: #1b6ec2;
+  color: white;
+}
+
+td button {
+  float: right;
 }

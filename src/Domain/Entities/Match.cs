@@ -27,8 +27,8 @@ namespace Domain.Entities
         [Column("IsFinished")]
         public bool IsFinished { get; set; }
 
-        [Column("AddressId")]
-        public int? AddressId { get; set; }
+        [Column("StadiumId")]
+        public int? StadiumId { get; set; }
 
         [Column("MatchDate")]
         public DateTime? Date { get; set; }
@@ -39,7 +39,7 @@ namespace Domain.Entities
 
         public virtual Season Season { get; set; }
 
-        public virtual Address Address { get; set; }
+        public virtual Stadium Stadium { get; set; }
 
         public virtual MatchScore MatchScore { get; set; }
 

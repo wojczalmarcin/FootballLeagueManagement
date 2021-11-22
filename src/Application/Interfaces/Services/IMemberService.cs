@@ -20,7 +20,7 @@ namespace Application.Interfaces.Services
         /// <summary>
         /// Edits member
         /// </summary>
-        /// <param name="member">The member</param>
+        /// <param name="memberEdit">The member to edit</param>
         /// <returns>Response data with edited member</returns>
         Task<ResponseData<MemberDto>> EditMemberAsync(MemberEditDto memberEdit);
 
@@ -30,5 +30,26 @@ namespace Application.Interfaces.Services
         /// <param name="matchId">The match Id</param>
         /// <returns>The response data</returns>
         Task<ResponseData<IEnumerable<MemberDto>>> GetPlayersByMatchIdAsync(int matchId);
+
+        /// <summary>
+        /// Gets number of members
+        /// </summary>
+        /// <returns>Response data with number of members</returns>
+        Task<ResponseData<int?>> GetNumberOfMembersAsync();
+
+        /// <summary>
+        /// Gets number of members of given team
+        /// </summary>
+        /// <param name="teamId">The team id</param>
+        /// <returns>Response data with number of members</returns>
+        Task<ResponseData<int?>> GetNumberOfMembersByTeamAsync(int teamId);
+
+        /// <summary>
+        /// Gets members by team id and page
+        /// </summary>
+        /// <param name="page">The page</param>
+        /// <param name="teamId">The team id</param>
+        /// <returns>Response data with the collection of the members</returns>
+        Task<ResponseData<IEnumerable<MemberDto>>> GetMembersByTeamIdAndPageAsyc((int size, int number) page, int teamId);
     }
 }

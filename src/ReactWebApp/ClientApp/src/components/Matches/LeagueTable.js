@@ -57,8 +57,8 @@ export class LeagueTable extends Component {
         fetch('Api/Match/Table/1')
             .then(response => response.json())
             .then((data) => {
-                console.log(data.data);
-                this.setState({ teams: data.data });
+                console.log(data);
+                this.setState({ teams: data });
                 this.setState({ loading: false });
             })
             .catch((error) => {

@@ -1,8 +1,5 @@
 ﻿using Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Interfaces
@@ -69,5 +66,26 @@ namespace Domain.Interfaces
         /// <param name="roleId">The role id</param>
         /// <returns>Collection of members</returns>
         Task<IEnumerable<Member>> GetMembersByMatchIdAndRoleIdAsync(int matchId, int roleId);
+
+        /// <summary>
+        /// Gets members by team id, page size and page number
+        /// </summary>
+        /// <param name="page">The page</param>
+        /// <param name="teamId">The team id</param>
+        /// <returns>The members of the league</returns>
+        Task<IEnumerable<Member>> GetMembersByTeamIdAsync((int size, int number) page, int teamId);
+
+        /// <summary>
+        /// Gets the number of members in given team
+        /// </summary>
+        /// <param name="teamId">The team id</param>
+        /// <returns>Number of members</returns>
+        Task<int> CountMembersByTeamIdAsync(int teamId);
+
+        /// <summary>
+        /// Gets the number of members
+        /// </summary>
+        /// <returns>Number of members</returns>
+        Task<int> CountMembersAsync();
     }
 }

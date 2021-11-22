@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useState } from 'react';
-import Dropdown from './Dropdown';
+import Dropdown from '../SeasonDropdown/Dropdown';
 import { useHistory } from "react-router-dom";
 import TeamPicker from './Pickers/TeamPicker';
 import { LoadTeams } from '../../Services/TeamService';
@@ -164,15 +164,15 @@ const Matches = () => {
                                 <td>{match.address ? match.address.city + " " + match.address.street + " " + match.address.houseNumber : ""}</td>
                                 {editing !== match.id ?
                                     <td>
-                                        <button className='btn-primary' onClick={() => handleDelete(match.id)} disabled={match.isFinished}>Usuń</button>
-                                        <button className='btn-primary' onClick={() => handleEdit(match)} disabled={match.isFinished}>Edytuj</button>
                                         <button className='btn-primary' onClick={() => handleStats(match.id)}>Statystyki</button>
+                                        <button className='btn-primary' onClick={() => handleDelete(match.id)} disabled={match.isFinished}>Usuń</button>
+                                        <button className='btn-primary' onClick={() => handleEdit(match)} disabled={match.isFinished}>Edytuj</button>              
                                     </td>
                                     :
                                     <td>
+                                        <button className='btn-invisible' disabled={true}></button>
                                         <button className='btn-primary' onClick={() => handleSave()}>Zapisz</button>
                                         <button className='btn-primary' onClick={() => handleCancelEdit(match)}>Anuluj</button>
-                                        <button className='btn-invisible' disabled={true}>Statystyki</button>
                                     </td>
                                 }
                             </tr>
@@ -195,9 +195,9 @@ const Matches = () => {
                             </td>
                             <td></td>
                             <td>
-                                <button className='btn-invisible' disabled={true}>Zapisz</button>
-                                <button className='btn-primary' disabled={editing} onClick={handlePost}>Dodaj</button>
                                 <button className='btn-primary' disabled={editing} onClick={handleCancelAdd}>Anuluj</button>
+                                <button className='btn-primary' disabled={editing} onClick={handlePost}>Dodaj</button>
+                                <button className='btn-invisible' disabled={true}></button>
                             </td>
                         </tr>
                         :
@@ -208,9 +208,9 @@ const Matches = () => {
                             <td></td>
                             <td></td>
                             <td>
-                                <button className='btn-invisible' disabled={true}>Zapisz</button>
-                                <button className='btn-invisible' disabled={true}>Anuluj</button>
                                 <button className='btn-primary' disabled={editing} onClick={handleAdd}>Dodaj</button>
+                                <button className='btn-invisible' disabled={true}></button>
+                                <button className='btn-invisible' disabled={true}></button>
                             </td>
                         </tr>
                     }

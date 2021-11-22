@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import classes from "../Dropdown.module.css";
+import classes from "../../SeasonDropdown/Dropdown.module.css";
 
 const TeamPicker = (props) => {
 

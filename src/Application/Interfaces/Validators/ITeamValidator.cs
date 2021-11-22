@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.DTO.Create;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,13 @@ namespace Application.Interfaces.Validators
         /// <param name="team">The team</param>
         /// <param name="teamToEdit">The team to edit</param>
         /// <returns>Validation result</returns>
-        (HttpStatusCode statusCode, List<string> validationErrors) ValidateTeamEdit(TeamDto team, TeamDto teamToEdit);
+        Task<(HttpStatusCode statusCode, List<string> validationErrors)> ValidateTeamEdit(TeamDto team, TeamDto teamToEdit);
+
+        /// <summary>
+        /// Validates season creation
+        /// </summary>
+        /// <param name="team">The team to create</param>
+        /// <returns>Validation result</returns>
+        Task<(HttpStatusCode statusCode, List<string> validationErrors)> ValidateTeamCreation(CreateTeamDto team);
     }
 }

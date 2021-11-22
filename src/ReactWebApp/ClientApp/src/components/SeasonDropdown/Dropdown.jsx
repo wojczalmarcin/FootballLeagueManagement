@@ -7,13 +7,27 @@ const Dropdown = (props) => {
     
     const handleClick = (season) => {
         props.setCurrentSeason(season);
+        if(props.setShowAll)
+        {
+            props.setShowAll(false);
+        }
+        setToggle(false);
+    }
+
+    const handleClickAll = () => {
+        props.setShowAll(true);
+        props.setCurrentSeason({});
         setToggle(false);
     }
 
     return (
         <div className={classes.dropdown}>
             <button onClick={() => setToggle(!toggle)} className={classes.dropbtn}>
-                {new Date(props.currentSeason.startDate).getFullYear() + "/" + (props.currentSeason.endDate ? new Date(props.currentSeason.endDate).getFullYear() : "")}
+                {!props.showAll ?
+                new Date(props.currentSeason.startDate).getFullYear() + "/" + (props.currentSeason.endDate ? new Date(props.currentSeason.endDate).getFullYear() : "")
+                :
+                "Wszystkie"
+                }
             </button>
             {toggle? 
                 <div className={classes.dropdownContent}>
@@ -24,6 +38,13 @@ const Dropdown = (props) => {
                             </p>
                             )
                         })
+                    }
+                    {props.showAll!== undefined ?
+                        <p onClick={handleClickAll}>
+                            Wszystkie
+                        </p>
+                        :
+                        <span></span>
                     }
                 </div>
                 :

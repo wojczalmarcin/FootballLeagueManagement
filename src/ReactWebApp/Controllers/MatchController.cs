@@ -33,7 +33,7 @@ namespace WebAPI.Controllers
         /// <param name="seasonId">season Id</param>
         /// <returns>Response data</returns>
         [HttpGet("Table/{seasonId}")]
-        public async Task<ActionResult<ResponseData<IEnumerable<TeamStatisticsDto>>>> GetTable(int seasonId)
+        public async Task<ActionResult> GetTable(int seasonId)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace WebAPI.Controllers
         /// <param name="matchId">match Id</param>
         /// <returns>Response data</returns>
         [HttpGet("{matchId}")]
-        public async Task<ActionResult<ResponseData<MatchDto>>> GetMatch(int matchId)
+        public async Task<ActionResult> GetMatch(int matchId)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace WebAPI.Controllers
         /// <param name="seasonId">season Id</param>
         /// <returns>Response data with matches</returns>
         [HttpGet]
-        public async Task<ActionResult<ResponseData<IEnumerable<MatchDto>>>> GetMatchesBySeasonId(int seasonId)
+        public async Task<ActionResult> GetMatchesBySeasonId(int seasonId)
         {
             try
             {
@@ -90,7 +90,7 @@ namespace WebAPI.Controllers
         /// <param name="match">The match to create</param>
         /// <returns>Response data</returns>
         [HttpPost]
-        public async Task<ActionResult<ResponseData<MatchDto>>> CreateMatch(CreateMatchDto match)
+        public async Task<ActionResult> CreateMatch(CreateMatchDto match)
         {
             try
             {
@@ -109,7 +109,7 @@ namespace WebAPI.Controllers
         /// <param name="matchId">The match Id</param>
         /// <returns>Response data</returns>
         [HttpDelete("Delete/{matchId}")]
-        public async Task<ActionResult<ResponseData<MatchDto>>> DeleteMatch(int matchId)
+        public async Task<ActionResult> DeleteMatch(int matchId)
         {
             try
             {
@@ -128,11 +128,30 @@ namespace WebAPI.Controllers
         /// <param name="match">The match to create</param>
         /// <returns>Response data</returns>
         [HttpPut]
-        public async Task<ActionResult<ResponseData<MatchDto>>> EditMatch(EditMatchDto match)
+        public async Task<ActionResult> EditMatch(EditMatchDto match)
         {
             try
             {
                 var responseData = await _matchService.EditMatchAsync(match);
+                return HttpResponse(responseData);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Sets match to finish
+        /// </summary>
+        /// <param name="matchId">The match id</param>
+        /// <returns>Response data</returns>
+        [HttpPut("Finish")]
+        public async Task<ActionResult> FinishMatch(int matchId)
+        {
+            try
+            {
+                var responseData = await _matchService.FinishTheMatch(matchId);
                 return HttpResponse(responseData);
             }
             catch (Exception e)

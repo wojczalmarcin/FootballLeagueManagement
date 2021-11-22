@@ -109,35 +109,8 @@ namespace Application.Services.Match
         /// <param name="match">The match</param>
         /// <returns>Response data with created match</returns>
         public async Task<ResponseData<MatchDto>> CreateMatchAsync(CreateMatchDto match)
-        {
-            var responseData = new ResponseData<MatchDto>();
-           
-            var validateCreation = await _matchValidator.ValidateMatchCreation(match);
-
-            responseData.ResponseStatus = validateCreation.statusCode;
-            responseData.ValidationErrors = validateCreation.validationErrors;
-
-            if (validateCreation.statusCode != HttpStatusCode.OK)
-            {
-                return responseData;
-            }
-
-            var matchId = await _matchRepository.AddMatchAsync(_mapper.Map<Domain.Entities.Match>(match));
-
-            if (matchId > 0)
-            {
-                var addedMatch = _mapper.Map<MatchDto>(match);
-                addedMatch.Id = matchId;
-                responseData.Data = addedMatch;
-            }
-            else
-            {
-                responseData.ResponseStatus = HttpStatusCode.InternalServerError;
-                responseData.ValidationErrors.Add("There was a problem with creating match");
-            }
-
-            return responseData;
-        }
+            => await this.CreateAsync<CreateMatchDto, MatchDto, Domain.Entities.Match>(match,
+                _matchRepository.AddMatchAsync, _matchValidator.ValidateMatchCreation);
 
         /// <summary>
         /// Deletes match
@@ -149,10 +122,10 @@ namespace Application.Services.Match
                 _matchRepository.DeleteMatchAsync, _matchValidator.ValidateMatchDeletion);
 
         /// <summary>
-        /// Creates new match
+        /// Edits match
         /// </summary>
         /// <param name="match">The match</param>
-        /// <returns>Response data with created match</returns>
+        /// <returns>Response data with edited match</returns>
         public async Task<ResponseData<MatchDto>> EditMatchAsync(EditMatchDto match)
         {
             var responseData = new ResponseData<MatchDto>();
@@ -189,6 +162,42 @@ namespace Application.Services.Match
             {
                 responseData.ResponseStatus = HttpStatusCode.InternalServerError;
                 responseData.ValidationErrors.Add("There was a problem with creating match");
+            }
+
+            return responseData;
+        }
+
+        /// <summary>
+        /// Sets finish flag of the match to true
+        /// </summary>
+        /// <param name="matchId">The match Id</param>
+        /// <returns>Response data with finished match</returns>
+        public async Task<ResponseData<MatchDto>> FinishTheMatch(int matchId)
+        {
+            var responseData = new ResponseData<MatchDto>();
+
+            var match = _mapper.Map<MatchDto>(await _matchRepository.GetMatchByIdAsync(matchId));
+
+            var validate = _matchValidator.ValidateMatchFinishing(match);
+
+            responseData.ResponseStatus = validate.statusCode;
+            responseData.ValidationErrors = validate.validationErrors;
+
+            if (validate.statusCode != HttpStatusCode.OK)
+            {
+                return responseData;
+            }
+
+            match.IsFinished = true;
+            
+            if(await _matchRepository.EditMatchAsync(_mapper.Map<Domain.Entities.Match> (match)))
+            {
+                responseData.Data = match;
+            }
+            else
+            {
+                responseData.ResponseStatus = HttpStatusCode.InternalServerError;
+                responseData.ValidationErrors.Add("There was a problem with finishing the match");
             }
 
             return responseData;

@@ -17,7 +17,7 @@ namespace Application.DTO
 
         public virtual SeasonDto Season { get; set; }
 
-        public virtual AddressDto Address { get; set; }
+        public virtual StadiumDto Stadium { get; set; }
 
         public virtual MatchScoreDto MatchScore { get; set; }
 

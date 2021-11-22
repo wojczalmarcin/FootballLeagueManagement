@@ -15,13 +15,15 @@ namespace WebAPI.Controllers
             switch (responseData.ResponseStatus)
             {
                 case HttpStatusCode.BadRequest:
-                    return BadRequest(responseData);
+                    return BadRequest(responseData.ValidationErrors);
                 case HttpStatusCode.NotFound:
-                    return NotFound(responseData);
+                    return NotFound(responseData.ValidationErrors);
+                case HttpStatusCode.InternalServerError:
+                    return Problem(responseData.ValidationErrors.ToString());
                 case HttpStatusCode.Forbidden:
                     return Forbid(responseData.ValidationErrors.ToString());
                 default:
-                    return Ok(responseData);
+                    return Ok(responseData.Data);
             }
         }
     }

@@ -3,17 +3,13 @@ import { HandleResponseError, HandleResponseErrorGet } from "./ResponseErrorHand
 export const LoadSeasonsCurrentSeason = (setSeasons, setCurrentSeason) => {
     return (
         fetch('Api/Season')
-            .then(response => response.json())
+            .then(HandleResponseErrorGet)
             .then((data) => {
-                if (data.responseStatus !== 200) {
-                    HandleResponseErrorGet(data);
-                }
-                else {
-                    setSeasons(data.data);
-                    setCurrentSeason(data.data[0]);
-                }
+                setSeasons(data);
+                setCurrentSeason(data[0]);
             })
             .catch((error) => {
+                alert(error);
                 console.error('Error:', error);
             })
     );
@@ -22,16 +18,10 @@ export const LoadSeasonsCurrentSeason = (setSeasons, setCurrentSeason) => {
 export const LoadSeasons = (setSeasons) => {
     return (
         fetch('Api/Season')
-            .then(response => response.json())
-            .then((data) => {
-                if (data.responseStatus !== 200) {
-                    HandleResponseErrorGet(data);
-                }
-                else {
-                    setSeasons(data.data);
-                }
-            })
+            .then(HandleResponseErrorGet)
+            .then((data) => setSeasons(data))
             .catch((error) => {
+                alert(error);
                 console.error('Error:', error);
             })
     );
@@ -44,13 +34,9 @@ export const EditSeason = (inputs) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(inputs)
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.responseStatus !== 200) {
-                    HandleResponseError(data);
-                }
-            })
+            .then(HandleResponseError)
             .catch(error => {
+                alert(error);
                 console.error('Error:', error);
             })
     );
@@ -63,13 +49,9 @@ export const AddSeason = (inputs) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(inputs)
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.responseStatus !== 200) {
-                    HandleResponseError(data);
-                }
-            })
+            .then(HandleResponseError)
             .catch(error => {
+                alert(error);
                 console.error('Error:', error);
             })
     );

@@ -1,6 +1,7 @@
 USE FootballLeague;
 GO
 
+DELETE FROM dbo.FL_TB_MatchMember;
 DELETE FROM dbo.FL_LG_PlayerStatsLog;
 DELETE FROM dbo.FL_TB_Match;
 DELETE FROM dbo.FL_TB_SeasonTeam;
@@ -31,7 +32,43 @@ VALUES	('Janusz', 'Kowalski', 1, 1),
 		('Karol', 'B³aszczykowski', 1, 5),
 		('Daniel', 'Kulczyk', 1, 5),
 		('Pawe³', 'Morawiecki', 1, 6),
-		('Patryk', 'Kaczyñski', 1, 6);
+		('Patryk', 'Kaczyñski', 1, 6),
+		('Bartosz', 'Magik', 1, 1),
+		('Mateusz', 'Kapustka', 1, 1),
+		('Wojciech', 'Rydzyk', 1, 1),
+		('Karol', 'Rodzynek', 1, 1),
+		('Marcin', 'Niewiadomski', 1, 1),
+		('Tymoteusz', 'Smolec', 1, 1),
+		('Sylwester', 'Samotny', 1, 2),
+		('Józef', 'Wielki', 1, 2),
+		('Patryk', 'Król', 1, 2),
+		('Karol', 'M³ot', 1, 2),
+		('Nikodem', 'Gruszka', 1, 2),
+		('Andrzej', 'Pietruszka', 1, 2),
+		('Jaros³aw', 'Gawlik', 1, 3),
+		('Szymon', 'Samozwaniec', 1, 3),
+		('Grzegorz', 'Nowak', 1, 3),
+		('Krzysztof', 'Myœliciel', 1, 3),
+		('Mateusz', 'Góralski', 1, 3),
+		('Tadeusz', 'Lewandowski', 1, 3),
+		('Stefan', 'M¹czyñski', 1, 4),
+		('Cyryl', 'Wêdrownik', 1, 4),
+		('Janusz', 'Ma³y', 1, 4),
+		('Aleksander', 'Kowalczyk', 1, 4),
+		('Miron', 'Urbañski', 1, 4),
+		('Andrzej', 'Krawczyk', 1, 4),
+		('Przemys³aw', 'Kubiak', 1, 5),
+		('Boles³aw', 'Zieliñski', 1, 5),
+		('Dorian', 'Rutkowski', 1, 5),
+		('Ignacy', 'Stêpieñ', 1, 5),
+		('Emil', 'Makowski', 1, 5),
+		('Remigiusz', 'Andrzejewski', 1, 5),
+		('Ludwik', 'Michalak', 1, 6),
+		('Marcin', 'Szczepañski', 1, 6),
+		('Ariel', 'Ostrowski', 1, 6),
+		('Edward', 'Pawlak', 1, 6),
+		('Filip', 'Witkowski', 1, 6),
+		('Piotr', 'Zawadzki', 1, 6);
 GO
 
 INSERT INTO dbo.FL_LG_PlayerStatType (StatName, IsGoal)
@@ -69,22 +106,43 @@ VALUES  (1, 2, 1, 1),
 		(5, 6, 1, 1);
 GO
 
+-- Filling MatchMember table
 DECLARE @matchCount INT = 1;
 
 WHILE @matchCount < 16
 BEGIN
 	DECLARE @TeamHomeId INT = (SELECT TeamHomeId FROM FL_TB_Match WHERE Id = @matchCount);
 	DECLARE @TeamAwayId INT = (SELECT TeamAwayId FROM FL_TB_Match WHERE Id = @matchCount);
-	DECLARE @Player1Id INT = (SELECT TOP 1 Id FROM FL_TB_Member WHERE TeamId = @TeamHomeId ORDER BY Id);
-	DECLARE @Player2Id INT = (SELECT TOP 1 Id FROM FL_TB_Member WHERE TeamId = @TeamHomeId ORDER BY Id DESC);
-	DECLARE @Player3Id INT = (SELECT TOP 1 Id FROM FL_TB_Member WHERE TeamId = @TeamAwayId ORDER BY Id);
-	DECLARE @Player4Id INT = (SELECT TOP 1 Id FROM FL_TB_Member WHERE TeamId = @TeamAwayId ORDER BY Id DESC);
+	DECLARE @PlayerId INT;
+	DECLARE @TeamId INT;
 
-	INSERT INTO dbo.FL_TB_MatchMember (MatchId, MemberId, IsMemberInHomeTeam)
-	   VALUES (@matchCount,@Player1Id, 1),
-			  (@matchCount,@Player2Id, 1),
-			  (@matchCount,@Player3Id, 0),
-			  (@matchCount,@Player4Id, 0);
+	DECLARE PlayersCursor CURSOR FAST_FORWARD READ_ONLY
+	FOR
+    SELECT Id, TeamId 
+	FROM FL_TB_Member 
+	WHERE TeamId = @TeamHomeId;
+
+	OPEN PlayersCursor
+
+	FETCH NEXT FROM PlayersCursor INTO @PlayerId, @TeamId
+
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+
+		IF @TeamId = @TeamHomeId
+			INSERT INTO dbo.FL_TB_MatchMember (MatchId, MemberId, IsMemberInHomeTeam)
+			VALUES (@matchCount,@PlayerId, 1)
+		ELSE
+			INSERT INTO dbo.FL_TB_MatchMember (MatchId, MemberId, IsMemberInHomeTeam)
+			VALUES (@matchCount,@PlayerId, 0)
+
+        FETCH NEXT FROM PlayersCursor INTO @PlayerId, @TeamId
+
+		END
+
+	CLOSE PlayersCursor
+	DEALLOCATE PlayersCursor
+
 	SET @matchCount = @matchCount + 1;
 END;
 

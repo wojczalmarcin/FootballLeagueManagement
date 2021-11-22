@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.DTO.Create;
 using Application.Interfaces.Services;
 using Application.Interfaces.Validators;
 using AutoMapper;
@@ -51,7 +52,14 @@ namespace Application.Services.Team
         /// <returns>The response data</returns>
         public async Task<ResponseData<TeamDto>> GetTeamByIdAsync(int teamId)
             => await GetByIdAsync<TeamDto, Domain.Entities.Team>(teamId, _teamRepository.GetTeamByIdAsync, _teamValidator.ValidateTeamExistence);
-        
+
+
+        /// <summary>
+        /// Gets all teams
+        /// </summary>
+        /// <returns>The response data</returns>
+        public async Task<ResponseData<IEnumerable<TeamDto>>> GetAllTeams()
+            => await GetAllAsync<TeamDto, Domain.Entities.Team> (_teamRepository.GetAllTeamsAsync, _teamValidator.ValidateTeamExistence);
 
         /// <summary>
         /// Gets teams by season Id
@@ -85,5 +93,14 @@ namespace Application.Services.Team
         /// <returns>Response data with edited team</returns>
         public async Task<ResponseData<TeamDto>> EditTeamAsync(TeamDto team)
             => await EditAsync(team, _teamRepository.GetTeamByIdAsync, _teamRepository.EditTeamAsync, _teamValidator.ValidateTeamEdit);
+
+        /// <summary>
+        /// Creates given team
+        /// </summary>
+        /// <param name="team">The team to create</param>
+        /// <returns>Response data with created team</returns>
+        public async Task<ResponseData<TeamDto>> CreateTeamAsync(CreateTeamDto team)
+            => await this.CreateAsync<CreateTeamDto, TeamDto, Domain.Entities.Team>(team,
+                _teamRepository.AddTeamAsync, _teamValidator.ValidateTeamCreation);
     }
 }

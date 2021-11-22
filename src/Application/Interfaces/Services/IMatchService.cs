@@ -43,10 +43,17 @@ namespace Application.Interfaces.Services
         Task<ResponseData<MatchDto>> DeleteMatchAsync(int matchId);
 
         /// <summary>
-        /// Creates new match
+        /// Edits match
         /// </summary>
         /// <param name="match">The match</param>
-        /// <returns>Response data with created match</returns>
+        /// <returns>Response data with edited match</returns>
         Task<ResponseData<MatchDto>> EditMatchAsync(EditMatchDto match);
+
+        /// <summary>
+        /// Sets finish flag of the match to true
+        /// </summary>
+        /// <param name="matchId">The match Id</param>
+        /// <returns>Response data with finished match</returns>
+        Task<ResponseData<MatchDto>> FinishTheMatch(int matchId);
     }
 }

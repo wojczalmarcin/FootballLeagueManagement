@@ -12,8 +12,6 @@ namespace Infrastructure
 
         public DbSet<Address> Addresses { get; set; }
 
-        public DbSet<FootballerPitchTime> FootballerPitchTimes { get; set; }
-
         public DbSet<Match> Matches { get; set; }
 
         public DbSet<MatchScore> MatchScores { get; set; }

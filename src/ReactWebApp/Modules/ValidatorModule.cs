@@ -2,6 +2,7 @@
 using Application.Services.Match;
 using Application.Services.Member;
 using Application.Services.MemberRole;
+using Application.Services.Page;
 using Application.Services.PlayerStats;
 using Application.Services.PlayerStatType;
 using Application.Services.Season;
@@ -21,6 +22,7 @@ namespace WebAPI.Modules
             builder.RegisterType<PlayerStatsValidator>().As<IPlayerStatsValidator>();
             builder.RegisterType<MemberRoleValidator>().As<IMemberRoleValidator>();
             builder.RegisterType<PlayerStatTypeValidator>().As<IPlayerStatTypeValidator>();
+            builder.RegisterType<PageValidator>().As<IPageValidator>();
         }
     }
 } 

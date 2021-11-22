@@ -33,8 +33,14 @@ namespace Domain.Interfaces
         /// <summary>
         /// Edits team
         /// </summary>
-        /// <param name="season">The team</param>
+        /// <param name="team">The team</param>
         /// <returns>Returns true if team edited</returns>
         Task<bool> EditTeamAsync(Team team);
+
+        /// <summary>
+        /// Gets all teams
+        /// </summary>
+        /// <returns>Collection of teams</returns>
+        Task<IEnumerable<Team>> GetAllTeamsAsync();
     }
 }

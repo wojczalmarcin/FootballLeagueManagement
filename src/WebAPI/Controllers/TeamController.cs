@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.DTO;
+using Application.DTO.Create;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -29,7 +30,7 @@ namespace WebAPI.Controllers
         /// <param name="teamId">team id</param>
         /// <returns>Response data</returns>
         [HttpGet("{teamId}")]
-        public async Task<ActionResult<ResponseData<TeamDto>>> Get (int teamId)
+        public async Task<ActionResult> Get (int teamId)
         {
             try
             {
@@ -43,12 +44,30 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
+        /// Gets all teams
+        /// </summary>
+        /// <returns>Response data</returns>
+        [HttpGet]
+        public async Task<ActionResult> GetAllAsync()
+        {
+            try
+            {
+                var responseData = await _teamService.GetAllTeams();
+                return HttpResponse(responseData);
+            }
+            catch (Exception e)
+            {
+                return this.Problem(e.Message);
+            }
+
+        }
+        /// <summary>
         /// Gets teams by season id
         /// </summary>
         /// <param name="seasonId">season id</param>
         /// <returns>Response data</returns>
         [HttpGet("Season/{seasonId}")]
-        public async Task<ActionResult<ResponseData<IEnumerable<TeamDto>>>> GetBySeason(int seasonId)
+        public async Task<ActionResult> GetBySeason(int seasonId)
         {
             try
             {
@@ -64,14 +83,33 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Puts team
         /// </summary>
-        /// <param name="season">Season to put</param>
+        /// <param name="team">Team to put</param>
         /// <returns>Response data</returns>
         [HttpPut]
-        public async Task<ActionResult<ResponseData<SeasonDto>>> PutAsync(TeamDto team)
+        public async Task<ActionResult> PutAsync(TeamDto team)
         {
             try
             {
                 var responseData = await _teamService.EditTeamAsync(team);
+                return HttpResponse(responseData);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Puts team
+        /// </summary>
+        /// <param name="team">Team to post</param>
+        /// <returns>Response data</returns>
+        [HttpPost]
+        public async Task<ActionResult> PostAsync(CreateTeamDto team)
+        {
+            try
+            {
+                var responseData = await _teamService.CreateTeamAsync(team);
                 return HttpResponse(responseData);
             }
             catch (Exception e)

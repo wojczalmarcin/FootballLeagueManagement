@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.DTO.Create;
 using AutoMapper;
 using Domain.Entities;
 
@@ -26,6 +27,8 @@ namespace Infrastructure.AutoMapper
             CreateMap<CreateMatchDto, Match>();
             CreateMap<CreatePlayerStatsDto, PlayerStatsDto>();
             CreateMap<CreatePlayerStatsDto, PlayerStatsLog>();
+            CreateMap<CreateTeamDto, TeamDto>();
+            CreateMap<CreateTeamDto, Team>();
         }
 
     }

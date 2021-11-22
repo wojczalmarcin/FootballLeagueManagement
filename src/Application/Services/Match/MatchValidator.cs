@@ -189,5 +189,36 @@ namespace Application.Services.Match
             return (statusCode, validationErrors);
 
         }
+
+        /// <summary>
+        /// Validates finishng the match
+        /// </summary>
+        /// <param name="match">The match</param>
+        /// <returns>Validation result</returns>
+        public (HttpStatusCode statusCode, List<string> validationErrors) ValidateMatchFinishing(MatchDto match)
+        {
+            var validateMatchExistence = this.ValidateMatchExistence(match);
+            var statusCode = validateMatchExistence.statusCode;
+            var validationErrors = validateMatchExistence.validationErrors;
+
+            if (validateMatchExistence.statusCode != HttpStatusCode.OK)
+            {
+                return (statusCode, validationErrors);
+            }
+
+            if (match.IsFinished)
+            {
+                validationErrors.Add("This match is already finished.");
+                statusCode = HttpStatusCode.BadRequest;
+            }
+
+            if (!match.Date.HasValue || match.Date.Value > DateTime.Now)
+            {
+                validationErrors.Add("This match has not been started yet.");
+                statusCode = HttpStatusCode.BadRequest;
+            }
+
+            return (statusCode, validationErrors);
+        }
     }
 }

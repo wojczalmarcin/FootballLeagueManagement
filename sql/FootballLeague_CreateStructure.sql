@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS dbo.FL_TB_MatchMember;
 DROP TABLE IF EXISTS dbo.FL_LG_PlayerStatsLog;
 DROP TABLE IF EXISTS dbo.FL_TB_Match;
 DROP TABLE IF EXISTS dbo.FL_LG_PlayerSuspensionLog;
-DROP TABLE IF EXISTS dbo.FL_TB_FootballerPitchTime;
 DROP TABLE IF EXISTS dbo.FL_TB_Member;
 DROP TABLE IF EXISTS dbo.FL_TB_SeasonTeam;
 DROP TABLE IF EXISTS dbo.FL_TB_Team;
@@ -23,7 +22,7 @@ CREATE TABLE dbo.FL_TB_Address(
 	City NVARCHAR(25) NOT NULL,
 	Street NVARCHAR(50) NULL,
 	HouseNumber NVARCHAR(25) NULL,
-	PostalCode NVARCHAR(10) NULL
+	PostalCode NVARCHAR(10) NOT NULL
 );
 GO
 
@@ -34,21 +33,13 @@ CREATE TABLE dbo.FL_LG_PlayerStatType(
 );
 GO
 
-CREATE TABLE dbo.FL_TB_FootballerPitchTime(
-	Id INT IDENTITY(1,1) PRIMARY KEY,
-	PlayerId INT NOT NULL,
-	AppearanceMinute INT NULL,
-	MinutesPlayed INT NULL
-);
-GO
-
 CREATE TABLE dbo.FL_TB_Match(
 	Id INT IDENTITY(1,1) PRIMARY KEY,
 	TeamHomeId INT NOT NULL,
 	TeamAwayId INT NOT NULL,
 	SeasonId INT NOT NULL,
 	IsFinished BIT NOT NULL,
-	AddressId INT NULL,
+	StadiumId INT NULL,
 	MatchDate DATETIME NULL
 );
 GO
@@ -74,7 +65,9 @@ CREATE TABLE dbo.FL_TB_MatchMember(
 	Id INT IDENTITY(1,1) PRIMARY KEY,
 	MatchId INT NOT NULL,
 	MemberId INT NOT NULL,
-	IsMemberInHomeTeam BIT NOT NULL
+	IsMemberInHomeTeam BIT NOT NULL,
+	AppearanceMinute INT NULL,
+	MinutesPlayed INT NULL
 );
 GO
 
@@ -127,11 +120,6 @@ CREATE TABLE dbo.FL_TB_SeasonTeam(
 
 -- Foreign keys
 
-ALTER TABLE dbo.FL_TB_FootballerPitchTime
-WITH CHECK ADD CONSTRAINT FK_Member_FootballerPitchTime
-FOREIGN KEY (PlayerId) REFERENCES dbo.FL_TB_Member(Id);
-GO
-
 ALTER TABLE dbo.FL_TB_Match
 WITH CHECK ADD CONSTRAINT FK_Team_Match_Home
 FOREIGN KEY (TeamHomeId) REFERENCES dbo.FL_TB_Team(Id);
@@ -145,6 +133,11 @@ GO
 ALTER TABLE dbo.FL_TB_Match
 WITH CHECK ADD CONSTRAINT FK_Season_Match
 FOREIGN KEY (SeasonId) REFERENCES dbo.FL_TB_Season(Id);
+GO
+
+ALTER TABLE dbo.FL_TB_Match
+WITH CHECK ADD CONSTRAINT FK_Stadium_Match
+FOREIGN KEY (StadiumId) REFERENCES dbo.FL_TB_Stadium(Id);
 GO
 
 ALTER TABLE dbo.FL_TB_Member
@@ -231,12 +224,10 @@ GO
 
 -- Create indexes
 
-CREATE NONCLUSTERED INDEX PlayerId ON dbo.FL_TB_FootballerPitchTime (PlayerId ASC);
-
 CREATE NONCLUSTERED INDEX TeamHomeId ON dbo.FL_TB_Match (TeamHomeId ASC);
 CREATE NONCLUSTERED INDEX TeamAwayId ON dbo.FL_TB_Match (TeamAwayId ASC);
 CREATE NONCLUSTERED INDEX SeasonId ON dbo.FL_TB_Match (SeasonId ASC);
-CREATE NONCLUSTERED INDEX AddressId ON dbo.FL_TB_Match (AddressId ASC);
+CREATE NONCLUSTERED INDEX StadiumId ON dbo.FL_TB_Match (StadiumId ASC);
 
 CREATE NONCLUSTERED INDEX MemberRoleId ON dbo.FL_TB_Member (MemberRoleId ASC);
 CREATE NONCLUSTERED INDEX TeamId ON dbo.FL_TB_Member (TeamId ASC);

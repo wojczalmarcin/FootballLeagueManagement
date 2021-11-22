@@ -51,6 +51,18 @@ namespace Infrastructure.Repositories
             .ToListAsync();
 
         /// <summary>
+        /// Gets all teams
+        /// </summary>
+        /// <returns>Collection of teams</returns>
+        public async Task<IEnumerable<Team>> GetAllTeamsAsync()
+            => await this._dbContext.Teams
+            .AsNoTracking()
+            .Include(t => t.Stadium)
+            .Include(t => t.Address)
+            .Include(t => t.SeasonTeams)
+            .ToListAsync();
+
+        /// <summary>
         /// Adds new team
         /// </summary>
         /// <param name="team">The team</param>
@@ -66,7 +78,7 @@ namespace Infrastructure.Repositories
         /// <summary>
         /// Edits team
         /// </summary>
-        /// <param name="season">The team</param>
+        /// <param name="team">The team</param>
         /// <returns>Returns true if team edited</returns>
         public async Task<bool> EditTeamAsync(Team team)
         {
