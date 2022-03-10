@@ -4,7 +4,6 @@ import { LoadSeasonsCurrentSeason } from '../../Services/SeasonService';
 import { LoadAllTeams, LoadTeams } from '../../Services/TeamService';
 import Dropdown from '../SeasonDropdown/Dropdown';
 import { LoadNumberOfMembersByTeamId } from '../../Services/MemberService';
-
 import ReactPaginate from 'react-paginate';
 import TeamRow from './TeamRow';
 import TeamAddRow from './TeamAddRow';

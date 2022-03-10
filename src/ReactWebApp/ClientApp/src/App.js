@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
-
 import './custom.css'
-import { LeagueTable } from './components/Matches/LeagueTable';
 import Seasons from './components/Seasons/Seasons';
 import Matches from './components/Matches/Matches';
 import MatchStats from './components/Matches/MatchStats';
 import Members from './components/Members/Members';
 import Teams from './components/Teams/Teams';
 import { BrowserRouter, Switch } from "react-router-dom";
+import LeagueTable from './components/Matches/LeagueTable';
+
 export default class App extends Component {
   static displayName = App.name;
 

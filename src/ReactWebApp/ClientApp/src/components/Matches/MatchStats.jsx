@@ -122,8 +122,8 @@ const MatchStats = () => {
                                 <td>{matchStat.player.firstName + " " + matchStat.player.lastName}</td>
                                 <td>{matchStat.startMinute}</td>
                                 <td>
-                                    <button className='btn-invisible' disabled={true}>Anuluj</button>
                                     <button className='btn-primary' onClick={() => handleDelete(matchStat.id)}>Usuń</button>
+                                    <button className='btn-invisible' disabled={true}>Anuluj</button>
                                 </td>
                             </tr>)
                     }
@@ -135,8 +135,8 @@ const MatchStats = () => {
                             <td></td>
                             <td></td>
                             <td>
-                                <button className='btn-invisible' disabled={true}>Anuluj</button>
                                 <button className='btn-primary' onClick={handleAdd}>Dodaj</button>
+                                <button className='btn-invisible' disabled={true}>Anuluj</button>
                             </td>
                         </tr>
 
@@ -154,8 +154,8 @@ const MatchStats = () => {
                                 />
                             </td>
                             <td>
-                                <button className='btn-primary' onClick={handlePost}>Dodaj</button>
                                 <button className='btn-primary' onClick={handleCancelAdd}>Anuluj</button>
+                                <button className='btn-primary' onClick={handlePost}>Dodaj</button>
                             </td>
 
                         </tr>
@@ -172,6 +172,8 @@ const MatchStats = () => {
             :
             <div>
                 {renderStatuses()}
+                <button className='btn-primary-auto' disabled={match.isFinished}>Zakończ mecz</button>
+                <button className='btn-primary-auto' disabled={match.isFinished}>Dodaj zawodników</button>
             </div>
     );
 }

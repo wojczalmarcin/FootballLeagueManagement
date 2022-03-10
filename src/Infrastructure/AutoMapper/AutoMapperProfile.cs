@@ -29,6 +29,7 @@ namespace Infrastructure.AutoMapper
             CreateMap<CreatePlayerStatsDto, PlayerStatsLog>();
             CreateMap<CreateTeamDto, TeamDto>();
             CreateMap<CreateTeamDto, Team>();
+            CreateMap<PlayerSuspensionDto, PlayerSuspensionLog>().ReverseMap();
         }
 
     }

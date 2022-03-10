@@ -1,6 +1,9 @@
 ﻿using Application.Interfaces.Services;
 using Application.Services.Match;
 using Application.Services.Member;
+using Application.Services.PlayerStats;
+using Application.Services.PlayerStatType;
+using Application.Services.PlayerSuspension;
 using Application.Services.Season;
 using Application.Services.Team;
 using Autofac;
@@ -15,6 +18,9 @@ namespace WebAPI.Modules
             builder.RegisterType<SeasonService>().As<ISeasonService>();
             builder.RegisterType<TeamService>().As<ITeamService>();
             builder.RegisterType<MemberService>().As<IMemberService>();
+            builder.RegisterType<PlayerStatsService>().As<IPlayerStatsService>();
+            builder.RegisterType<PlayerStatTypeService>().As<IPlayerStatTypeService>();
+            builder.RegisterType<PlayerSuspensionService>().As<IPlayerSuspensionService>();
         }
     }
 }

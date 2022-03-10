@@ -13,7 +13,6 @@ namespace WebAPI.Controllers
     [Route("api/[controller]")]
     public class MemberController : FootballLeagueControllerBase
     {
-
         private readonly IMemberService _memberService;
 
         /// <summary>

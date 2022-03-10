@@ -16,7 +16,7 @@ namespace WebAPI.Modules
             builder.RegisterType<PlayerStatsLogRepository>().As<IPlayerStatsLogRepository>();
             builder.RegisterType<MemberRoleRepository>().As<IMemberRoleRepository>();
             builder.RegisterType<PlayerStatTypeRepository>().As<IPlayerStatTypeRepository>();
-            
+            builder.RegisterType<PlayerSuspensionLogRepository>().As<IPlayerSuspensionLogRepository>();
         }
     }
 }

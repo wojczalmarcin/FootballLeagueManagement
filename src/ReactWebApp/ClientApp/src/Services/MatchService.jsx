@@ -24,6 +24,18 @@ export const LoadMatchById = (setMatch, matchId) => {
     );
 }
 
+export const LoadLeagueTable = (setLeagueTable, currentSeasonId) => {
+    return (
+        fetch(`Api/Match/Table/${currentSeasonId}`)
+            .then(HandleResponseErrorGet)
+            .then((data) => setLeagueTable(data))
+            .catch((error) => {
+                alert(error);
+                console.error('Error:', error);
+            })
+    );
+}
+
 export const DeleteMatch = (matchId) => {
     return (
         fetch(`api/Match/Delete/${matchId}`, {

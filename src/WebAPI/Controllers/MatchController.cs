@@ -13,7 +13,6 @@ namespace WebAPI.Controllers
     [Route("api/[controller]")]
     public class MatchController : FootballLeagueControllerBase
     {
-        
         private readonly IMatchService _matchService;
 
         private readonly IPlayerStatsService _playerStatsService;
@@ -46,7 +45,7 @@ namespace WebAPI.Controllers
                 return Problem(e.Message);
             }
         }
-        
+
         /// <summary>
         /// Gets match data by id
         /// </summary>
@@ -65,7 +64,7 @@ namespace WebAPI.Controllers
                 return Problem(e.Message);
             }
         }
-        
+
         /// <summary>
         /// Gets matches by season
         /// </summary>
@@ -84,7 +83,7 @@ namespace WebAPI.Controllers
                 return Problem(e.Message);
             }
         }
-        
+
         /// <summary>
         /// Creates new match
         /// </summary>
@@ -103,7 +102,7 @@ namespace WebAPI.Controllers
                 return Problem(e.Message);
             }
         }
-        
+
         /// <summary>
         /// Deletes match by id
         /// </summary>
@@ -122,7 +121,7 @@ namespace WebAPI.Controllers
                 return Problem(e.Message);
             }
         }
-        
+
         /// <summary>
         /// Edits match
         /// </summary>
@@ -141,7 +140,7 @@ namespace WebAPI.Controllers
                 return Problem(e.Message);
             }
         }
-        
+
         /// <summary>
         /// Sets match to finish
         /// </summary>

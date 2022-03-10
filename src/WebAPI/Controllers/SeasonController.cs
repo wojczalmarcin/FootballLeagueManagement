@@ -11,7 +11,6 @@ namespace WebAPI.Controllers
     [Route("api/[controller]")]
     public class SeasonController : FootballLeagueControllerBase
     {
-
         private readonly ISeasonService _seasonService;
 
         /// <summary>

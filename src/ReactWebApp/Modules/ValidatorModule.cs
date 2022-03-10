@@ -5,6 +5,7 @@ using Application.Services.MemberRole;
 using Application.Services.Page;
 using Application.Services.PlayerStats;
 using Application.Services.PlayerStatType;
+using Application.Services.PlayerSuspension;
 using Application.Services.Season;
 using Application.Services.Team;
 using Autofac;
@@ -23,6 +24,7 @@ namespace WebAPI.Modules
             builder.RegisterType<MemberRoleValidator>().As<IMemberRoleValidator>();
             builder.RegisterType<PlayerStatTypeValidator>().As<IPlayerStatTypeValidator>();
             builder.RegisterType<PageValidator>().As<IPageValidator>();
+            builder.RegisterType<PlayerSuspensionValidator>().As<IPlayerSuspensionValidator>();
         }
     }
 } 

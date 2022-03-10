@@ -25,7 +25,24 @@ code {
 .btn-primary-bigger:hover {
   background-color: #006fdd;
 }
+.btn-primary-auto {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+  margin: 1%;
+  width: auto;
+  float: right;
+}
+.btn-primary-auto:hover {
+  background-color: #006fdd;
+}
 .btn-primary:disabled {
+  background-color: gray;
+}
+.btn-primary-bigger:disabled {
+  background-color: gray;
+}
+.btn-primary-auto:disabled {
   background-color: gray;
 }
 .btn-invisible {
